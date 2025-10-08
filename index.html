@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Servicios GNU/Linux</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: He transformado el documento lineal en una SPA interactiva con tres secciones principales: "Inicio", "Fundamentos" y un "Explorador de Servicios" dinámico. El explorador utiliza un menú de navegación lateral que carga contenido de forma instantánea en un panel principal, creando una experiencia de usuario fluida y similar a una aplicación. Esta estructura fue elegida para mejorar la usabilidad, permitiendo al usuario acceder directamente a la información de interés sin tener que navegar por páginas separadas, lo que hace que el contenido técnico sea más accesible y fácil de digerir. -->
+    <!-- Visualization & Content Choices: Dado que el informe es textual, no se usan gráficos. El enfoque está en la presentación interactiva del texto. Para las licencias, se usa un sistema de acordeón (mostrar/ocultar) para reducir la sobrecarga de información. Para la sección de servicios, el "Explorador de Servicios" es la pieza central interactiva; al hacer clic en un servicio del menú, su descripción se carga dinámicamente. Esto convierte un documento estático en una herramienta de aprendizaje explorable. Todo implementado con Vanilla JS. Confirmado: NO SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        .nav-link-active {
+            background-color: #0d9488;
+            color: #ffffff;
+        }
+        .service-btn-active {
+            background-color: #0d9488;
+            color: #ffffff;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .service-content {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <header id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-teal-700">Servicios en GNU/Linux</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#inicio" data-section="inicio" class="nav-link text-gray-600 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Inicio</a>
+                        <a href="#fundamentos" data-section="fundamentos" class="nav-link text-gray-600 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Fundamentos</a>
+                        <a href="#explorer" data-section="explorer" class="nav-link text-gray-600 hover:bg-teal-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Explorador de Servicios</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="inicio" class="mb-16 scroll-mt-20">
+            <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-teal-800 mb-4">Bienvenido al Proyecto</h2>
+                <div class="space-y-6 text-slate-700">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-900">¿De qué trata el proyecto?</h3>
+                        <p>Este proyecto tiene como objetivo principal la implementación, configuración y documentación de una serie de servicios de red fundamentales utilizando el sistema operativo GNU/Linux. A través de este sitio, se presentará un análisis detallado de cada servicio, desde sus conceptos teóricos y antecedentes hasta su puesta en marcha en un entorno práctico. El propósito es demostrar la robustez, flexibilidad y eficiencia del software libre como base para la infraestructura tecnológica de cualquier organización.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-900">Integrante del Equipo</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Francisco Ortega Zazueta</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fundamentos" class="mb-16 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-teal-800 mb-6">Fundamentos Clave</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-slate-900">Software Libre y Licencias</h3>
+                    <p class="mb-4 text-slate-700">El <strong>Software Libre</strong> respeta la libertad de los usuarios para ejecutar, copiar, distribuir, estudiar, modificar y mejorar el software. Para garantizar esto, se utilizan diversas licencias.</p>
+                    <div id="license-container" class="space-y-3">
+                        <div class="license-item">
+                            <button class="license-toggle w-full text-left font-semibold p-3 bg-stone-100 hover:bg-stone-200 rounded-md transition">Licencia Pública General de GNU (GPL)</button>
+                            <div class="license-content hidden p-3 text-sm text-slate-600">Garantiza que cualquier trabajo derivado se mantenga como software libre bajo la misma licencia (copyleft).</div>
+                        </div>
+                        <div class="license-item">
+                            <button class="license-toggle w-full text-left font-semibold p-3 bg-stone-100 hover:bg-stone-200 rounded-md transition">Licencia Pública General Reducida de GNU (LGPL)</button>
+                            <div class="license-content hidden p-3 text-sm text-slate-600">Versión más permisiva que permite ser enlazado por software propietario sin que este deba ser liberado.</div>
+                        </div>
+                         <div class="license-item">
+                            <button class="license-toggle w-full text-left font-semibold p-3 bg-stone-100 hover:bg-stone-200 rounded-md transition">Licencia MIT</button>
+                            <div class="license-content hidden p-3 text-sm text-slate-600">Muy permisiva, permite la reutilización para cualquier fin (incluso en software propietario) con la única condición de incluir el aviso de copyright.</div>
+                        </div>
+                        <div class="license-item">
+                            <button class="license-toggle w-full text-left font-semibold p-3 bg-stone-100 hover:bg-stone-200 rounded-md transition">Licencia Apache 2.0</button>
+                            <div class="license-content hidden p-3 text-sm text-slate-600">Permisiva como la MIT, pero también otorga derechos explícitos sobre patentes, protegiendo a los usuarios.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-2xl font-semibold mb-4 text-slate-900">El Sistema Operativo GNU/Linux</h3>
+                    <p class="mb-4 text-slate-700">Es un sistema operativo tipo Unix compuesto por el kernel <strong>Linux</strong> y software del proyecto <strong>GNU</strong>. Es robusto, seguro y libre, siendo la columna vertebral de gran parte de Internet.</p>
+                    <h4 class="font-semibold mb-2">Servicios Potenciales en GNU/Linux:</h4>
+                    <p class="text-sm text-slate-600">Su arquitectura lo hace ideal para ofrecer una amplia gama de servicios de red. Explore los más comunes en la siguiente sección.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="explorer" class="scroll-mt-20">
+             <h2 class="text-3xl font-bold text-teal-800 mb-6">Explorador de Servicios</h2>
+             <p class="text-slate-700 mb-8 max-w-3xl">Esta sección interactiva detalla los servicios de red más esenciales que se pueden implementar sobre GNU/Linux. Cada uno cumple una función crítica en una infraestructura de TI. Seleccione un servicio del menú para aprender más sobre él, su propósito y las tecnologías clave asociadas.</p>
+            <div class="max-w-4xl mx-auto">
+                <div id="service-accordion" class="space-y-3">
+                    
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                            <span>🌐 Servicio Web</span>
+                            <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                             <p class="mb-4">Un servidor web es un software que almacena los archivos de un sitio web (HTML, CSS, imágenes, etc.) y los entrega a los navegadores de los usuarios cuando estos lo solicitan a través del protocolo HTTP/HTTPS.</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="border border-stone-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg text-slate-900">Apache HTTP Server</h4>
+                                    <p class="text-sm text-slate-600">Es el servidor web más utilizado históricamente. Conocido por su flexibilidad, su enorme cantidad de módulos y su poder de configuración a través de archivos <code>.htaccess</code>. Es una opción excelente para alojamientos compartidos y aplicaciones que requieren configuraciones complejas.</p>
+                                </div>
+                                <div class="border border-stone-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg text-slate-900">NGINX</h4>
+                                    <p class="text-sm text-slate-600">Un servidor web más moderno, conocido por su alto rendimiento, bajo consumo de memoria y su capacidad para manejar una gran cantidad de conexiones simultáneas. A menudo se utiliza también como balanceador de carga o proxy inverso.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>🛰️ Servicio DNS</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                           <p class="mb-4">El Servicio de Nombres de Dominio (DNS) es un sistema fundamental en Internet que se encarga de traducir los nombres de dominio legibles para los humanos (ej. <code>www.google.com</code>) en direcciones IP numéricas (ej. <code>142.250.184.142</code>) que las máquinas pueden entender.</p>
+                            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                                <h4 class="font-bold text-lg text-slate-900">BIND (Berkeley Internet Name Domain)</h4>
+                                <p class="text-sm text-slate-600">Es el software de servidor DNS más utilizado en Internet. Permite configurar un servidor para que resuelva nombres de dominios externos (rol recursivo) o para que gestione los registros de un dominio propio (rol autoritativo).</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>🗄️ Base de Datos</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                           <p class="mb-4">Un servicio de base de datos permite almacenar, organizar, proteger y recuperar datos de manera estructurada y eficiente. Son el corazón de casi todas las aplicaciones modernas.</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="border border-stone-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg text-slate-900">Relacional (Ej: MySQL, PostgreSQL)</h4>
+                                    <p class="text-sm text-slate-600">Organizan los datos en tablas con filas y columnas, con relaciones predefinidas. Utilizan SQL y son ideales para datos estructurados y transacciones que requieren consistencia.</p>
+                                </div>
+                                <div class="border border-stone-200 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg text-slate-900">No Relacional (Ej: MongoDB, Redis)</h4>
+                                    <p class="text-sm text-slate-600">No utilizan tablas. Almacenan datos en formatos flexibles (documentos, clave-valor). Son altamente escalables y se usan para grandes volúmenes de datos no estructurados.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>💻 Servicio SSH</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                           <p class="mb-4">El Secure Shell (SSH) es un protocolo de red que permite establecer una conexión segura entre dos máquinas a través de una red insegura, como Internet. Proporciona autenticación, cifrado y garantiza la integridad de los datos.</p>
+                            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                               <h4 class="font-bold text-lg text-slate-900">Uso Principal</h4>
+                               <p class="text-sm text-slate-600">Su principal uso es la administración remota de servidores a través de una línea de comandos, permitiendo a los administradores gestionar sistemas desde cualquier lugar del mundo de forma segura.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>🌿 Servicio GIT</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                           <p class="mb-4">Git es un sistema de control de versiones distribuido. Permite a los desarrolladores llevar un registro de todos los cambios realizados en el código fuente de un proyecto a lo largo del tiempo. Facilita el trabajo en equipo, ya que múltiples personas pueden trabajar en diferentes partes del proyecto de forma simultánea y luego fusionar sus cambios de manera ordenada.</p>
+                             <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                               <h4 class="font-bold text-lg text-slate-900">Auto-alojamiento</h4>
+                               <p class="text-sm text-slate-600">Aunque Git es el software, servicios como GitLab o Gitea permiten montar un servidor propio para alojar repositorios privados y gestionar el ciclo de vida del desarrollo de software.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>📤 Servicio FTP y Alternativas</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                            <p class="mb-4">El Protocolo de Transferencia de Archivos (FTP) es un protocolo de red estándar para transferir archivos. Aunque es antiguo e inseguro (no cifra los datos), todavía se utiliza en algunos contextos. Se recomienda usar alternativas modernas.</p>
+                            <div class="space-y-3">
+                                <div class="border border-stone-200 rounded-lg p-3"><strong class="text-slate-900">ProFTPD:</strong> Un popular servidor FTP para sistemas tipo Unix.</div>
+                                <div class="border border-green-200 bg-green-50 rounded-lg p-3"><strong class="text-green-900">SFTP (SSH File Transfer Protocol):</strong> La alternativa segura. Proporciona transferencia de archivos sobre una conexión SSH cifrada.</div>
+                                <div class="border border-green-200 bg-green-50 rounded-lg p-3"><strong class="text-green-900">NFS (Network File System):</strong> Permite acceder a archivos remotos como si fueran locales. Común en redes Linux/Unix.</div>
+                                <div class="border border-green-200 bg-green-50 rounded-lg p-3"><strong class="text-green-900">SAMBA:</strong> Permite que servidores Linux compartan archivos e impresoras con clientes Windows de forma nativa.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>🖨️ Adm. de Impresión</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                             <p class="mb-4">Este servicio permite compartir impresoras en una red y gestionar los trabajos de impresión de múltiples usuarios de forma centralizada. El servidor se encarga de recibir los trabajos, ponerlos en una cola y enviarlos a la impresora cuando esté disponible.</p>
+                             <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                                <h4 class="font-bold text-lg text-slate-900">CUPS (Common UNIX Printing System)</h4>
+                                <p class="text-sm text-slate-600">Es el sistema de impresión estándar en GNU/Linux y macOS. Permite a una computadora actuar como un potente servidor de impresión, gestionando impresoras locales o de red y haciéndolas accesibles para otros equipos en la red.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-item bg-white rounded-lg shadow-sm">
+                        <button class="service-btn w-full text-left p-4 font-semibold flex justify-between items-center hover:bg-stone-50 transition-colors rounded-lg">
+                           <span>💾 Adm. de Respaldo</span>
+                           <span class="text-xl transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="service-content hidden p-4 border-t border-stone-200">
+                            <p class="mb-4">Un servicio de respaldo (o backup) se encarga de automatizar la copia de seguridad de datos importantes para poder restaurarlos en caso de pérdida, corrupción o desastre. Un buen sistema de respaldo es crucial para la continuidad del negocio.</p>
+                            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4">
+                                <h4 class="font-bold text-lg text-slate-900">Bacula</h4>
+                                <p class="text-sm text-slate-600">Es una solución de respaldo de nivel empresarial y de código abierto. Permite gestionar respaldos, restauraciones y verificaciones de datos de múltiples equipos en una red. Es muy potente y configurable, aunque su curva de aprendizaje puede ser elevada.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const serviceAccordion = document.getElementById('service-accordion');
+            const serviceItems = serviceAccordion.querySelectorAll('.service-item');
+
+            serviceItems.forEach(item => {
+                const button = item.querySelector('.service-btn');
+                const content = item.querySelector('.service-content');
+                const icon = button.querySelector('span:last-child');
+
+                button.addEventListener('click', () => {
+                    content.classList.toggle('hidden');
+                    button.classList.toggle('service-btn-active');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+            
+            const licenseToggles = document.querySelectorAll('.license-toggle');
+            licenseToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            });
+            
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.forEach(link => {
+                            link.classList.remove('nav-link-active');
+                            if (link.dataset.section === id) {
+                                link.classList.add('nav-link-active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' });
+            
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
+
+
