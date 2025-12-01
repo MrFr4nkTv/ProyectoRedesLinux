@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios de Red - Proyecto Fedora</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], }, colors: { fedora: { blue: '#3C6EB4', dark: '#294172', } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="media/Logo ITSON.png" alt="ITSON" class="h-8">
+                <div class="bg-fedora-blue text-white p-1.5 rounded font-bold">F42</div>
+                <h1 class="text-xl font-bold text-slate-800">Redes <span class="text-fedora-blue">Linux</span></h1>
+            </div>
+            <nav class="hidden md:flex gap-5 text-sm font-medium">
+                <a href="index.html" class="hover:text-fedora-blue transition">Inicio</a>
+                <a href="fundamentos.html" class="hover:text-fedora-blue transition">Fundamentos</a>
+                <a href="admin.html" class="hover:text-fedora-blue transition">Administración</a>
+                <a href="servicios.html" class="text-fedora-blue font-bold">Servicios</a>
+                <a href="tutorial-ftp.html" class="hover:text-fedora-blue transition">Tutorial FTP</a>
+                <a href="conclusiones.html" class="hover:text-fedora-blue transition">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 max-w-5xl">
+        
+        <!-- ENCABEZADO MEJORADO -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-fedora-blue text-white px-3 py-1 rounded-full text-xs font-bold">INFRAESTRUCTURA</span>
+            </div>
+            <h2 class="text-4xl font-bold text-fedora-dark mb-4">Catálogo de Servicios de Red en GNU/Linux</h2>
+            <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                Los servicios de red son programas que se ejecutan en segundo plano (demonios) esperando conexiones de clientes. 
+                Son la columna vertebral de cualquier infraestructura de TI moderna, desde pequeñas empresas hasta grandes centros de datos.
+            </p>
+            <div class="bg-blue-50 border border-blue-100 p-5 rounded-xl">
+                <h3 class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                    <span>📚</span> ¿Por qué es importante conocer estos servicios?
+                </h3>
+                <p class="text-sm text-blue-800 leading-relaxed">
+                    Como ingeniero de software o administrador de sistemas, entender cómo funcionan estos servicios te permite diseñar arquitecturas robustas, 
+                    diagnosticar problemas de red, implementar soluciones de alta disponibilidad y garantizar la seguridad de los sistemas. 
+                    A continuación se documentan <strong>8 servicios esenciales</strong> que todo profesional de TI debe conocer.
+                </p>
+            </div>
+        </div>
+
+        <!-- SERVICIOS CON ACORDEÓN -->
+        <div class="space-y-4" x-data="{ selected: null }">
+
+            <!-- SERVICIO 1: WEB -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 1 ? selected = null : selected = 1" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center text-2xl shadow-sm">🌐</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio Web (HTTP/HTTPS)</h3>
+                            <p class="text-sm text-slate-500">Puerto 80 (HTTP) / 443 (HTTPS)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 1 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 1" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            El servicio web es el encargado de recibir solicitudes HTTP/HTTPS de los navegadores y responder con contenido: 
+                            páginas HTML, imágenes, archivos CSS/JavaScript, datos JSON de APIs, etc. Es literalmente la base de toda la World Wide Web. 
+                            Sin servidores web, no existirían sitios como Google, Facebook, Amazon ni ninguna aplicación web moderna.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Cuando escribes una URL en tu navegador, este envía una solicitud HTTP al servidor. El servidor web procesa la solicitud, 
+                            busca el recurso pedido (archivo estático o lo genera dinámicamente con PHP, Python, etc.) y devuelve una respuesta con 
+                            un código de estado (200 OK, 404 Not Found, 500 Error, etc.) junto con el contenido.
+                        </p>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <img src="https://httpd.apache.org/icons/apache_pb.gif" alt="Apache" class="h-6" onerror="this.style.display='none'">
+                                    <strong class="text-slate-900">Apache HTTP Server (httpd)</strong>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    El servidor web más utilizado históricamente (desde 1995). Su arquitectura es <strong>modular</strong>: puedes agregar 
+                                    módulos para SSL, reescritura de URLs, autenticación, compresión, etc. Usa un modelo de procesos/hilos que lo hace muy estable.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700"><strong>Característica única:</strong> Archivos <code>.htaccess</code> permiten configuración 
+                                    descentralizada por directorio, ideal para hosting compartido donde cada usuario puede personalizar su espacio.</p>
+                                </div>
+                                <div class="mt-3 font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                    dnf install httpd<br>
+                                    systemctl start httpd
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">Nginx</strong>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Recomendado</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    Diseñado para resolver el problema C10K (manejar 10,000 conexiones simultáneas). Su arquitectura <strong>asíncrona 
+                                    basada en eventos</strong> le permite servir miles de conexiones con mínimo uso de memoria. Es el estándar actual 
+                                    para sitios de alto tráfico.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700"><strong>Casos de uso:</strong> Proxy inverso, balanceo de carga, terminación SSL, 
+                                    servidor de archivos estáticos, caché HTTP. Netflix, Cloudflare y muchos CDN lo usan.</p>
+                                </div>
+                                <div class="mt-3 font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                    dnf install nginx<br>
+                                    systemctl start nginx
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 2: DNS -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 2 ? selected = null : selected = 2" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg flex items-center justify-center text-2xl shadow-sm">🛰️</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio DNS (Domain Name System)</h3>
+                            <p class="text-sm text-slate-500">Puerto 53 (UDP/TCP)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 2 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 2" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            DNS es el "directorio telefónico" de Internet. Traduce nombres de dominio legibles por humanos (como <code>google.com</code>) 
+                            a direcciones IP numéricas (como <code>142.250.80.46</code>) que las computadoras usan para comunicarse. 
+                            Sin DNS, tendrías que memorizar direcciones IP para visitar cualquier sitio web.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Cuando tu navegador necesita resolver un dominio, consulta al servidor DNS configurado (usualmente tu ISP o servicios como 8.8.8.8 de Google). 
+                            Si el servidor no tiene la respuesta en caché, consulta recursivamente a los servidores raíz, luego a los servidores TLD (.com, .org, etc.) 
+                            y finalmente al servidor autoritativo del dominio. Todo este proceso toma milisegundos.
+                        </p>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm mb-4">
+                            <div class="flex items-center gap-2 mb-3">
+                                <strong class="text-slate-900">BIND9 (Berkeley Internet Name Domain)</strong>
+                                <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Estándar de la industria</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                Es el servidor DNS más utilizado en Internet. Puede funcionar como servidor <strong>autoritativo</strong> (dueño de zonas DNS) 
+                                o como <strong>resolver/caché</strong> (resuelve consultas para clientes locales). Maneja millones de consultas por segundo en los 
+                                servidores raíz de Internet.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-1">Tipos de registros DNS comunes:</p>
+                                    <ul class="text-xs text-slate-600 space-y-1">
+                                        <li><code>A</code> → Dominio a IPv4</li>
+                                        <li><code>AAAA</code> → Dominio a IPv6</li>
+                                        <li><code>CNAME</code> → Alias de otro dominio</li>
+                                        <li><code>MX</code> → Servidor de correo</li>
+                                        <li><code>TXT</code> → Texto (SPF, DKIM, etc.)</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-1">Archivos de configuración:</p>
+                                    <ul class="text-xs text-slate-600 space-y-1">
+                                        <li><code>/etc/named.conf</code> → Config principal</li>
+                                        <li><code>/var/named/</code> → Archivos de zona</li>
+                                    </ul>
+                                    <div class="mt-2 font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                        dnf install bind bind-utils
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 3: BASE DE DATOS -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 3 ? selected = null : selected = 3" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-2xl shadow-sm">🗄️</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio de Base de Datos (RDBMS)</h3>
+                            <p class="text-sm text-slate-500">Puerto 3306 (MySQL/MariaDB) / 5432 (PostgreSQL)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 3 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 3" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Las bases de datos relacionales (RDBMS) son sistemas especializados en almacenar, organizar y recuperar datos estructurados 
+                            de forma eficiente y segura. Usan el lenguaje SQL para consultas y garantizan propiedades ACID (Atomicidad, Consistencia, 
+                            Aislamiento, Durabilidad) para transacciones críticas.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Los datos se organizan en tablas con filas y columnas. Las relaciones entre tablas se establecen mediante claves primarias y foráneas. 
+                            El motor de base de datos optimiza las consultas usando índices, caché de consultas y planes de ejecución. 
+                            Las aplicaciones web, móviles y empresariales dependen de estas bases de datos para persistir información.
+                        </p>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">MariaDB / MySQL</strong>
+                                    <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">Default en Fedora</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    MariaDB es el fork comunitario de MySQL (creado por el fundador original después de que Oracle comprara MySQL). 
+                                    Es la base de datos más popular para aplicaciones web (WordPress, Drupal, Magento, etc.). 
+                                    Fedora incluye MariaDB por defecto en sus repositorios.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100 mb-3">
+                                    <p class="text-xs text-slate-700"><strong>Ideal para:</strong> Aplicaciones web, CMS, e-commerce, 
+                                    proyectos que requieren compatibilidad MySQL y facilidad de uso.</p>
+                                </div>
+                                <div class="font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                    dnf install mariadb-server<br>
+                                    systemctl start mariadb<br>
+                                    mysql_secure_installation
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">PostgreSQL</strong>
+                                    <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Más avanzado</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    Considerada la base de datos de código abierto más avanzada. Soporta tipos de datos complejos (JSON, Arrays, 
+                                    Geoespaciales con PostGIS), transacciones ACID completas, replicación avanzada y extensibilidad mediante plugins.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100 mb-3">
+                                    <p class="text-xs text-slate-700"><strong>Ideal para:</strong> Aplicaciones empresariales, análisis de datos, 
+                                    sistemas GIS, proyectos que requieren integridad de datos estricta y funciones avanzadas.</p>
+                                </div>
+                                <div class="font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                    dnf install postgresql-server<br>
+                                    postgresql-setup --initdb<br>
+                                    systemctl start postgresql
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 4: SSH -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 4 ? selected = null : selected = 4" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-lg flex items-center justify-center text-2xl shadow-sm">🔐</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio SSH (Secure Shell)</h3>
+                            <p class="text-sm text-slate-500">Puerto 22</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 4 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 4" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            SSH (Secure Shell) es el protocolo estándar para acceso remoto seguro a servidores Linux/Unix. Reemplazó a Telnet y rlogin 
+                            al proporcionar comunicación <strong>completamente cifrada</strong>. Es la herramienta fundamental de cualquier administrador 
+                            de sistemas: permite ejecutar comandos, transferir archivos y crear túneles seguros.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            SSH usa criptografía asimétrica para el intercambio inicial de claves y luego cifrado simétrico para la sesión. 
+                            Soporta autenticación por contraseña o por par de llaves pública/privada (más seguro). El servidor SSH (sshd) escucha 
+                            conexiones entrantes y valida las credenciales antes de otorgar acceso a una shell.
+                        </p>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm mb-4">
+                            <div class="flex items-center gap-2 mb-3">
+                                <strong class="text-slate-900">OpenSSH</strong>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Preinstalado en Fedora</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                OpenSSH es la implementación más utilizada del protocolo SSH. Viene preinstalado en prácticamente todas las distribuciones Linux. 
+                                Incluye el servidor (sshd), cliente (ssh), y herramientas como scp y sftp para transferencia de archivos.
+                            </p>
+                            
+                            <div class="grid md:grid-cols-3 gap-3 mb-4">
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-1">🖥️ Acceso remoto</p>
+                                    <code class="text-xs">ssh usuario@servidor</code>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-1">📁 Transferencia (SFTP)</p>
+                                    <code class="text-xs">sftp usuario@servidor</code>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-1">🔑 Generar llaves</p>
+                                    <code class="text-xs">ssh-keygen -t ed25519</code>
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-50 border border-amber-200 p-3 rounded">
+                                <p class="text-xs text-amber-800">
+                                    <strong>🔒 Buenas prácticas de seguridad SSH:</strong> Deshabilitar login como root, usar autenticación por llaves, 
+                                    cambiar el puerto por defecto, usar fail2ban para bloquear ataques de fuerza bruta.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 5: GIT -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 5 ? selected = null : selected = 5" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center text-2xl shadow-sm">🌿</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio Git (Control de Versiones)</h3>
+                            <p class="text-sm text-slate-500">Puerto 9418 (Git) / 22 (SSH) / 80/443 (HTTP/S)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 5 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 5" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Git es el sistema de control de versiones distribuido más utilizado en el mundo del desarrollo de software. 
+                            Permite a equipos de cualquier tamaño colaborar en código fuente, rastrear cambios, crear ramas de desarrollo, 
+                            fusionar código y mantener un historial completo de todas las modificaciones.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Git almacena "snapshots" del proyecto en cada commit. Cada desarrollador tiene una copia completa del repositorio 
+                            (distribuido). Los cambios se sincronizan mediante push/pull a un repositorio central. Las ramas permiten trabajar 
+                            en características aisladas sin afectar el código principal.
+                        </p>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm mb-4">
+                            <h5 class="font-bold text-slate-900 mb-3">Soluciones de Auto-Hospedaje (Self-Hosted)</h5>
+                            <p class="text-sm text-slate-600 mb-4">
+                                Aunque servicios como GitHub y GitLab.com son populares, muchas organizaciones prefieren hospedar sus propios 
+                                servidores Git por privacidad, control y cumplimiento normativo.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded border border-slate-100">
+                                    <strong class="text-slate-900 block mb-2">GitLab CE (Community Edition)</strong>
+                                    <p class="text-xs text-slate-600 mb-2">
+                                        Plataforma completa de DevOps: repositorios Git, CI/CD integrado, gestión de proyectos, 
+                                        registro de contenedores, wiki y más. Es la opción más completa para empresas.
+                                    </p>
+                                    <div class="font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                        dnf install gitlab-ce
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded border border-slate-100">
+                                    <strong class="text-slate-900 block mb-2">Gitea</strong>
+                                    <p class="text-xs text-slate-600 mb-2">
+                                        Alternativa ligera y rápida. Consume muy pocos recursos (puede correr en una Raspberry Pi). 
+                                        Interfaz similar a GitHub. Ideal para equipos pequeños o proyectos personales.
+                                    </p>
+                                    <div class="font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                        # Disponible como binario o Docker
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 6: FTP -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 6 ? selected = null : selected = 6" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-lg flex items-center justify-center text-2xl shadow-sm">📤</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio FTP (File Transfer Protocol)</h3>
+                            <p class="text-sm text-slate-500">Puerto 21 (Control) / 20 (Datos)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 6 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 6" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            FTP (File Transfer Protocol) es uno de los protocolos más antiguos de Internet (1971). Su función es transferir 
+                            archivos entre un servidor y clientes. Aunque ha sido reemplazado en muchos casos por alternativas más seguras, 
+                            sigue siendo usado en hosting web, transferencia de archivos grandes y sistemas legacy.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            FTP usa dos conexiones: una de <strong>control</strong> (puerto 21) para comandos y otra de <strong>datos</strong> 
+                            (puerto 20 o puertos pasivos) para la transferencia real. Soporta modos activo y pasivo. El modo pasivo es 
+                            necesario cuando hay firewalls/NAT de por medio.
+                        </p>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">ProFTPD / VSFTPD</strong>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    Los dos servidores FTP más populares en Linux. <strong>ProFTPD</strong> es más configurable y modular. 
+                                    <strong>VSFTPD</strong> (Very Secure FTP Daemon) prioriza la seguridad y es más ligero.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100 mb-3">
+                                    <p class="text-xs text-slate-700"><strong>Características:</strong> Usuarios virtuales, chroot jail (aislamiento), 
+                                    cuotas de disco, limitación de ancho de banda, logs detallados.</p>
+                                </div>
+                                <a href="tutorial-ftp.html" class="inline-flex items-center gap-2 bg-fedora-blue text-white px-3 py-1.5 rounded text-xs hover:bg-fedora-dark transition">
+                                    Ver Tutorial Completo →
+                                </a>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-green-900">SFTP - La Alternativa Segura</strong>
+                                    <span class="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded">Recomendado</span>
+                                </div>
+                                <p class="text-sm text-green-800 leading-relaxed mb-3">
+                                    SFTP (SSH File Transfer Protocol) no es FTP sobre SSH, es un protocolo diferente que usa SSH como transporte. 
+                                    <strong>Todo el tráfico está cifrado</strong>, incluyendo credenciales y datos.
+                                </p>
+                                <div class="bg-green-100 p-3 rounded border border-green-200">
+                                    <p class="text-xs text-green-800"><strong>Ventaja:</strong> No requiere instalar un servidor adicional. 
+                                    Si tienes SSH (sshd), ya tienes SFTP disponible automáticamente.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-50 border border-red-200 p-4 rounded mt-4">
+                            <p class="text-sm text-red-800">
+                                <strong>⚠️ Advertencia de seguridad:</strong> FTP estándar transmite credenciales en texto plano. 
+                                Cualquiera en la red puede interceptar usuarios y contraseñas. En producción, usa SFTP o FTPS (FTP sobre TLS).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 7: IMPRESIÓN -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 7 ? selected = null : selected = 7" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-slate-400 to-slate-600 rounded-lg flex items-center justify-center text-2xl shadow-sm">🖨️</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio de Impresión (CUPS)</h3>
+                            <p class="text-sm text-slate-500">Puerto 631 (IPP)</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 7 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 7" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            CUPS (Common UNIX Printing System) es el sistema de impresión estándar en Linux, macOS y otros sistemas Unix. 
+                            Permite gestionar impresoras locales y en red, crear colas de impresión, administrar trabajos y compartir 
+                            impresoras con otros equipos de la red.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            CUPS utiliza el protocolo IPP (Internet Printing Protocol) para recibir trabajos de impresión. Los documentos 
+                            pasan por filtros que los convierten al formato que entiende la impresora (PostScript, PCL, etc.). 
+                            Proporciona una interfaz web en <code>http://localhost:631</code> para administración.
+                        </p>
+
+                        <div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2 mb-3">
+                                <strong class="text-slate-900">CUPS</strong>
+                                <span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded">Preinstalado</span>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                        CUPS viene preinstalado en Fedora. Detecta automáticamente muchas impresoras USB y de red. 
+                                        Para impresoras que requieren drivers propietarios, estos pueden instalarse desde los repositorios o 
+                                        descargarse del fabricante.
+                                    </p>
+                                    <div class="font-mono text-xs bg-slate-900 text-green-400 p-2 rounded">
+                                        systemctl status cups<br>
+                                        # Interfaz web: http://localhost:631
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700 font-bold mb-2">Casos de uso empresarial:</p>
+                                    <ul class="text-xs text-slate-600 space-y-1">
+                                        <li>• Servidor de impresión centralizado</li>
+                                        <li>• Compartir impresoras USB con la red</li>
+                                        <li>• Gestión de colas y prioridades</li>
+                                        <li>• Cuotas de impresión por usuario</li>
+                                        <li>• Registro de uso para auditoría</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERVICIO 8: RESPALDO -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <button @click="selected === 8 ? selected = null : selected = 8" class="w-full text-left px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-600 rounded-lg flex items-center justify-center text-2xl shadow-sm">💾</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Servicio de Respaldo (Backup)</h3>
+                            <p class="text-sm text-slate-500">Puertos variables según herramienta</p>
+                        </div>
+                    </div>
+                    <span x-text="selected === 8 ? '−' : '+'" class="text-fedora-blue font-bold text-2xl"></span>
+                </button>
+                <div x-show="selected === 8" x-collapse class="px-6 py-6 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+                    <div class="prose prose-sm max-w-none">
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Qué es y para qué sirve?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Los servicios de respaldo protegen los datos contra pérdida por fallos de hardware, errores humanos, 
+                            ataques de ransomware o desastres. Implementar una estrategia de backup sólida es una de las responsabilidades 
+                            más críticas de un administrador de sistemas. <strong>La regla 3-2-1:</strong> 3 copias, 2 medios diferentes, 1 offsite.
+                        </p>
+                        
+                        <h4 class="text-fedora-blue font-bold mb-3">¿Cómo funciona?</h4>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            Los backups pueden ser completos, incrementales (solo cambios desde el último backup) o diferenciales 
+                            (cambios desde el último completo). Las herramientas modernas usan deduplicación y compresión para optimizar 
+                            el espacio. Los backups deben probarse regularmente para garantizar que son restaurables.
+                        </p>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">Rsync</strong>
+                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Fundamental</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    Herramienta de sincronización incremental. Solo transfiere las diferencias entre origen y destino, 
+                                    lo que lo hace muy eficiente. Puede funcionar sobre SSH para transferencias seguras a servidores remotos.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100 mb-3">
+                                    <p class="text-xs text-slate-600 font-mono">
+                                        rsync -avz --delete /origen/ usuario@servidor:/destino/
+                                    </p>
+                                </div>
+                                <p class="text-xs text-slate-500">Base de la mayoría de scripts de backup personalizados.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <strong class="text-slate-900">Bacula / Amanda</strong>
+                                    <span class="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">Empresarial</span>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-3">
+                                    Soluciones cliente-servidor para respaldo de múltiples máquinas. Incluyen catálogos de backups, 
+                                    programación de tareas, soporte para cintas y discos, y consolas de administración.
+                                </p>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                    <p class="text-xs text-slate-700"><strong>Ideal para:</strong> Data centers, redes empresariales con decenas 
+                                    o cientos de servidores que requieren gestión centralizada de respaldos.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-200 p-4 rounded mt-4">
+                            <p class="text-sm text-blue-800">
+                                <strong>💡 Consejo profesional:</strong> Los backups que no se prueban no son backups, son solo esperanza. 
+                                Programa restauraciones de prueba periódicas para verificar la integridad de tus respaldos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="mt-12 flex justify-between items-center">
+            <a href="admin.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-fedora-blue transition">
+                <span>←</span> Administración
+            </a>
+            <a href="tutorial-ftp.html" class="inline-flex items-center gap-2 bg-fedora-blue text-white px-5 py-2.5 rounded-lg hover:bg-fedora-dark transition shadow-sm">
+                Ver Tutorial FTP Completo <span>→</span>
+            </a>
+        </div>
+
+    </main>
+    <footer class="bg-slate-900 text-slate-400 py-6 text-sm mt-auto">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <img src="media/Logo ITSON.png" alt="ITSON Universidad" class="h-10 brightness-0 invert opacity-60">
+            <div class="text-center md:text-right">
+                <p>&copy; 2025 - Francisco Ortega Zazueta</p>
+                <p class="text-xs text-slate-600 mt-1">Redes Linux | ITSON Universidad</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

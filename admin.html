@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración - Proyecto Fedora Linux</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], }, colors: { fedora: { blue: '#3C6EB4', dark: '#294172', } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="media/Logo ITSON.png" alt="ITSON" class="h-8">
+                <div class="bg-fedora-blue text-white p-1.5 rounded font-bold">F42</div>
+                <h1 class="text-xl font-bold text-slate-800">Redes <span class="text-fedora-blue">Linux</span></h1>
+            </div>
+            <nav class="hidden md:flex gap-5 text-sm font-medium">
+                <a href="index.html" class="hover:text-fedora-blue transition">Inicio</a>
+                <a href="fundamentos.html" class="hover:text-fedora-blue transition">Fundamentos</a>
+                <a href="admin.html" class="text-fedora-blue font-bold">Administración</a>
+                <a href="servicios.html" class="hover:text-fedora-blue transition">Servicios</a>
+                <a href="tutorial-ftp.html" class="hover:text-fedora-blue transition">Tutorial FTP</a>
+                <a href="conclusiones.html" class="hover:text-fedora-blue transition">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 max-w-5xl">
+        <div class="mb-12">
+            <span class="inline-block bg-fedora-blue/10 text-fedora-blue px-3 py-1 rounded-full text-xs font-bold mb-3">CRITERIOS 4, 5, 6 Y 7</span>
+            <h2 class="text-3xl font-bold text-fedora-dark mb-4">Tareas de Administración del Sistema</h2>
+            <p class="text-slate-600 text-lg">Gestión de respaldos, usuarios, privilegios y montaje de sistemas de archivos en Fedora Linux.</p>
+        </div>
+
+        <div class="space-y-12">
+            
+            <!-- CRITERIO 4: RESPALDO -->
+            <section class="bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300 p-8 rounded-xl shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5 text-9xl font-bold select-none">💾</div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="bg-green-500 text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">4</span>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Estrategia de Respaldo</h3>
+                            <p class="text-sm text-slate-400">Elementos importantes a respaldar y generación de un script</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                                <span>📁</span> Directorios Críticos a Respaldar
+                            </h4>
+                            <ul class="text-sm space-y-2">
+                                <li class="flex items-start gap-2">
+                                    <code class="bg-slate-700 px-2 py-0.5 rounded text-green-400">/etc</code>
+                                    <span>Archivos de configuración del sistema y servicios</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <code class="bg-slate-700 px-2 py-0.5 rounded text-green-400">/home</code>
+                                    <span>Datos de todos los usuarios, documentos, proyectos</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <code class="bg-slate-700 px-2 py-0.5 rounded text-green-400">/var/www</code>
+                                    <span>Archivos de sitios web (si aplica)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <code class="bg-slate-700 px-2 py-0.5 rounded text-green-400">/var/lib</code>
+                                    <span>Bases de datos y datos de aplicaciones</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="bg-slate-700/50 p-4 rounded-lg mt-4 border border-slate-600">
+                                <h5 class="text-white font-bold text-sm mb-2">🔒 Regla 3-2-1 de Backups</h5>
+                                <ul class="text-xs text-slate-300 space-y-1">
+                                    <li>• <strong>3</strong> copias de los datos importantes</li>
+                                    <li>• <strong>2</strong> tipos de medios diferentes (disco, nube)</li>
+                                    <li>• <strong>1</strong> copia fuera del sitio (offsite)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                                <span>📜</span> Script de Automatización
+                            </h4>
+                            <div class="bg-black/50 p-4 rounded-lg border border-slate-700 font-mono text-sm overflow-x-auto">
+<pre class="text-green-400"><span class="text-pink-400">#!/bin/bash</span>
+<span class="text-gray-500"># script_respaldo.sh</span>
+<span class="text-gray-500"># Autor: Francisco Ortega</span>
+
+<span class="text-cyan-400">FECHA</span>=$(date +%Y-%m-%d_%H%M)
+<span class="text-cyan-400">ORIGEN</span>="/home/francisco/proyectos"
+<span class="text-cyan-400">DESTINO</span>="/mnt/backups"
+<span class="text-cyan-400">ARCHIVO</span>="backup_$FECHA.tar.gz"
+
+<span class="text-yellow-400">echo</span> "🔄 Iniciando respaldo..."
+<span class="text-yellow-400">echo</span> "   Origen: $ORIGEN"
+<span class="text-yellow-400">echo</span> "   Destino: $DESTINO/$ARCHIVO"
+
+<span class="text-gray-500"># Crear archivo comprimido</span>
+tar -czpf $DESTINO/$ARCHIVO $ORIGEN 2>/dev/null
+
+<span class="text-purple-400">if</span> [ $? -eq 0 ]; <span class="text-purple-400">then</span>
+    <span class="text-cyan-400">SIZE</span>=$(du -h $DESTINO/$ARCHIVO | cut -f1)
+    <span class="text-yellow-400">echo</span> "✅ Respaldo completado: $SIZE"
+<span class="text-purple-400">else</span>
+    <span class="text-yellow-400">echo</span> "❌ Error en el respaldo"
+    exit 1
+<span class="text-purple-400">fi</span></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-700/30 p-4 rounded-lg border border-slate-600">
+                        <h5 class="text-white font-bold text-sm mb-2">⏰ Automatización con Cron</h5>
+                        <p class="text-sm text-slate-300 mb-2">Para ejecutar el script automáticamente cada día a las 2:00 AM:</p>
+                        <code class="block bg-black/50 p-2 rounded text-xs text-green-400">
+                            crontab -e<br>
+                            <span class="text-slate-400"># Agregar esta línea:</span><br>
+                            0 2 * * * /home/francisco/scripts/script_respaldo.sh
+                        </code>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CRITERIO 5: USUARIOS Y GRUPOS -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">5</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Administración de Usuarios y Grupos</h3>
+                        <p class="text-sm text-slate-500">Proceso de administración de usuarios y grupos</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Linux es un sistema <strong>multiusuario</strong>. Cada usuario tiene un UID (User ID) único y pertenece a uno o más grupos. 
+                            La información de usuarios se almacena en <code class="bg-slate-100 px-1 rounded">/etc/passwd</code> y las contraseñas 
+                            cifradas en <code class="bg-slate-100 px-1 rounded">/etc/shadow</code>.
+                        </p>
+                        
+                        <h4 class="font-bold text-slate-800 mb-3">📋 Comandos Principales</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                <code class="bg-fedora-blue text-white px-2 py-1 rounded text-sm">useradd</code>
+                                <div>
+                                    <p class="text-sm text-slate-700 font-medium">Crear nuevo usuario</p>
+                                    <p class="text-xs text-slate-500">useradd -m -s /bin/bash nombre</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                <code class="bg-fedora-blue text-white px-2 py-1 rounded text-sm">usermod</code>
+                                <div>
+                                    <p class="text-sm text-slate-700 font-medium">Modificar usuario existente</p>
+                                    <p class="text-xs text-slate-500">usermod -aG grupo usuario</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                <code class="bg-fedora-blue text-white px-2 py-1 rounded text-sm">passwd</code>
+                                <div>
+                                    <p class="text-sm text-slate-700 font-medium">Asignar/cambiar contraseña</p>
+                                    <p class="text-xs text-slate-500">passwd nombre_usuario</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                <code class="bg-fedora-blue text-white px-2 py-1 rounded text-sm">groupadd</code>
+                                <div>
+                                    <p class="text-sm text-slate-700 font-medium">Crear nuevo grupo</p>
+                                    <p class="text-xs text-slate-500">groupadd desarrolladores</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                <code class="bg-fedora-blue text-white px-2 py-1 rounded text-sm">userdel</code>
+                                <div>
+                                    <p class="text-sm text-slate-700 font-medium">Eliminar usuario</p>
+                                    <p class="text-xs text-slate-500">userdel -r nombre (borra /home también)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3">🖥️ Ejemplo Práctico</h4>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 font-mono text-sm text-slate-300 bg-slate-900 space-y-1">
+                                <p class="text-gray-500"># Crear grupo para el equipo</p>
+                                <p><span class="text-red-400">[root@fedora ~]#</span> <span class="text-green-400">groupadd desarrolladores</span></p>
+                                <p></p>
+                                <p class="text-gray-500"># Crear usuario con shell bash y home</p>
+                                <p><span class="text-red-400">[root@fedora ~]#</span> <span class="text-green-400">useradd -m -s /bin/bash -c "Juan Pérez" juan</span></p>
+                                <p></p>
+                                <p class="text-gray-500"># Asignar contraseña</p>
+                                <p><span class="text-red-400">[root@fedora ~]#</span> <span class="text-green-400">passwd juan</span></p>
+                                <p>New password: ********</p>
+                                <p></p>
+                                <p class="text-gray-500"># Agregar al grupo (sin quitar otros)</p>
+                                <p><span class="text-red-400">[root@fedora ~]#</span> <span class="text-green-400">usermod -aG desarrolladores juan</span></p>
+                                <p></p>
+                                <p class="text-gray-500"># Verificar grupos del usuario</p>
+                                <p><span class="text-red-400">[root@fedora ~]#</span> <span class="text-green-400">groups juan</span></p>
+                                <p>juan : juan desarrolladores</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
+                            <p class="text-sm text-blue-800">
+                                <strong>💡 Tip:</strong> La opción <code class="bg-blue-100 px-1 rounded">-a</code> en usermod es crucial. 
+                                Sin ella, el usuario es <em>removido</em> de todos los demás grupos y solo queda en el especificado.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CRITERIO 6: PRIVILEGIOS -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">6</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Gestión de Privilegios</h3>
+                        <p class="text-sm text-slate-500">Proceso de gestión de privilegios y permisos</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Permisos de archivos -->
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="text-xl">🔐</span> Permisos de Archivos (chmod)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            En Linux, cada archivo tiene permisos para tres categorías: <strong>dueño (u)</strong>, <strong>grupo (g)</strong> 
+                            y <strong>otros (o)</strong>. Cada categoría puede tener permisos de Lectura (r), Escritura (w) y Ejecución (x).
+                        </p>
+                        
+                        <div class="bg-slate-900 rounded-lg p-4 mb-4">
+                            <p class="text-xs text-slate-400 mb-2">Representación numérica:</p>
+                            <div class="grid grid-cols-3 gap-2 text-center text-sm">
+                                <div class="bg-slate-800 p-2 rounded">
+                                    <p class="text-red-400 font-bold">r = 4</p>
+                                    <p class="text-slate-400 text-xs">Lectura</p>
+                                </div>
+                                <div class="bg-slate-800 p-2 rounded">
+                                    <p class="text-green-400 font-bold">w = 2</p>
+                                    <p class="text-slate-400 text-xs">Escritura</p>
+                                </div>
+                                <div class="bg-slate-800 p-2 rounded">
+                                    <p class="text-blue-400 font-bold">x = 1</p>
+                                    <p class="text-slate-400 text-xs">Ejecución</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-3">Ejemplo: <code class="text-yellow-400">chmod 755 archivo</code></p>
+                            <p class="text-xs text-slate-500">= rwx (7) para dueño, r-x (5) para grupo, r-x (5) para otros</p>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chmod 755 script.sh</code>
+                                <span class="text-slate-600 text-xs">Ejecutable por todos</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chmod 644 archivo.txt</code>
+                                <span class="text-slate-600 text-xs">Solo dueño puede escribir</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chmod 600 privado.key</code>
+                                <span class="text-slate-600 text-xs">Solo accesible por dueño</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sudo y chown -->
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="text-xl">⚡</span> Elevación de Privilegios (sudo)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            El comando <code class="bg-slate-100 px-1 rounded">sudo</code> permite ejecutar comandos con privilegios de root 
+                            sin iniciar sesión como root. Se configura en <code class="bg-slate-100 px-1 rounded">/etc/sudoers</code> (usar visudo para editarlo).
+                        </p>
+                        
+                        <div class="terminal-window shadow-lg mb-4">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 font-mono text-xs text-slate-300 bg-slate-900 space-y-2">
+                                <p class="text-gray-500"># Editar sudoers de forma segura</p>
+                                <p><span class="text-green-400">visudo</span></p>
+                                <p></p>
+                                <p class="text-gray-500"># Dar permisos totales a un usuario</p>
+                                <p>francisco ALL=(ALL) ALL</p>
+                                <p></p>
+                                <p class="text-gray-500"># Permitir sin contraseña (no recomendado)</p>
+                                <p>francisco ALL=(ALL) NOPASSWD: ALL</p>
+                                <p></p>
+                                <p class="text-gray-500"># Dar permisos a un grupo (%)</p>
+                                <p>%desarrolladores ALL=(ALL) ALL</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                            <span class="text-xl">👤</span> Cambiar Propiedad (chown)
+                        </h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chown usuario archivo</code>
+                                <span class="text-slate-600 text-xs">Cambiar dueño</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chown usuario:grupo archivo</code>
+                                <span class="text-slate-600 text-xs">Cambiar dueño y grupo</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-slate-50 rounded border border-slate-100">
+                                <code class="bg-slate-200 px-2 py-0.5 rounded text-xs">chown -R usuario carpeta/</code>
+                                <span class="text-slate-600 text-xs">Recursivo (incluye contenido)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CRITERIO 7: MONTAJE -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">7</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Montaje de Sistemas de Archivos</h3>
+                        <p class="text-sm text-slate-500">Proceso de montaje de sistemas de archivos</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            En Linux, los dispositivos de almacenamiento (discos, USBs, particiones de red) deben ser <strong>"montados"</strong> 
+                            en un directorio del árbol de archivos para ser accesibles. A diferencia de Windows, no existen "letras de unidad" (C:, D:).
+                        </p>
+                        
+                        <h4 class="font-bold text-slate-800 mb-3">📁 Puntos de Montaje Comunes</h4>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex items-center gap-3 p-2 bg-slate-50 rounded">
+                                <code class="text-sm font-mono text-fedora-blue">/mnt</code>
+                                <span class="text-sm text-slate-600">Montajes temporales manuales</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 bg-slate-50 rounded">
+                                <code class="text-sm font-mono text-fedora-blue">/media</code>
+                                <span class="text-sm text-slate-600">Montajes automáticos (USBs, CDs)</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 bg-slate-50 rounded">
+                                <code class="text-sm font-mono text-fedora-blue">/home</code>
+                                <span class="text-sm text-slate-600">Partición de datos de usuarios</span>
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-bold text-slate-800 mb-3">🔄 Montaje Automático (/etc/fstab)</h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Para que un disco se monte automáticamente al iniciar el sistema, se agrega una entrada en 
+                            <code class="bg-slate-100 px-1 rounded">/etc/fstab</code>. Se recomienda usar el UUID del disco para evitar 
+                            problemas si cambian los nombres de dispositivo.
+                        </p>
+                        <div class="bg-slate-900 rounded-lg p-3 text-xs font-mono text-slate-300">
+                            <p class="text-gray-500"># Ejemplo de línea en /etc/fstab</p>
+                            <p class="text-green-400">UUID=a1b2c3d4-... /mnt/datos ext4 defaults 0 2</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 font-mono text-sm text-slate-300 bg-slate-900 space-y-3">
+                                <div>
+                                    <p class="text-gray-500"># Ver dispositivos disponibles</p>
+                                    <p><span class="text-green-400">lsblk</span></p>
+                                    <p class="text-slate-500 text-xs">sda      8:0    0  500G  0 disk</p>
+                                    <p class="text-slate-500 text-xs">├─sda1   8:1    0  600M  0 part /boot/efi</p>
+                                    <p class="text-slate-500 text-xs">└─sda2   8:2    0  499G  0 part /</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500"># Ver UUIDs de los discos</p>
+                                    <p><span class="text-green-400">blkid</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500"># Montar USB manualmente</p>
+                                    <p><span class="text-green-400">mount /dev/sdb1 /mnt/usb</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500"># Desmontar</p>
+                                    <p><span class="text-green-400">umount /mnt/usb</span></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500"># Ver espacio en discos montados</p>
+                                    <p><span class="text-green-400">df -h</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
+                            <p class="text-sm text-amber-800">
+                                <strong>⚠️ Importante:</strong> Nunca desconectes un USB sin desmontarlo primero (<code class="bg-amber-100 px-1 rounded">umount</code>). 
+                                Los datos podrían corromperse si hay escrituras pendientes en el buffer.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="mt-12 flex justify-between items-center">
+            <a href="fundamentos.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-fedora-blue transition">
+                <span>←</span> Fundamentos
+            </a>
+            <a href="servicios.html" class="inline-flex items-center gap-2 bg-fedora-blue text-white px-5 py-2.5 rounded-lg hover:bg-fedora-dark transition shadow-sm">
+                Continuar a Servicios <span>→</span>
+            </a>
+        </div>
+    </main>
+    <footer class="bg-slate-900 text-slate-400 py-6 text-sm mt-auto">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <img src="media/Logo ITSON.png" alt="ITSON Universidad" class="h-10 brightness-0 invert opacity-60">
+            <div class="text-center md:text-right">
+                <p>&copy; 2025 - Francisco Ortega Zazueta</p>
+                <p class="text-xs text-slate-600 mt-1">Redes Linux | ITSON Universidad</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos - Proyecto Fedora Linux</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], }, colors: { fedora: { blue: '#3C6EB4', dark: '#294172', } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="media/Logo ITSON.png" alt="ITSON" class="h-8">
+                <div class="bg-fedora-blue text-white p-1.5 rounded font-bold">F42</div>
+                <h1 class="text-xl font-bold text-slate-800">Redes <span class="text-fedora-blue">Linux</span></h1>
+            </div>
+            <nav class="hidden md:flex gap-5 text-sm font-medium">
+                <a href="index.html" class="hover:text-fedora-blue transition">Inicio</a>
+                <a href="fundamentos.html" class="text-fedora-blue font-bold">Fundamentos</a>
+                <a href="admin.html" class="hover:text-fedora-blue transition">Administración</a>
+                <a href="servicios.html" class="hover:text-fedora-blue transition">Servicios</a>
+                <a href="tutorial-ftp.html" class="hover:text-fedora-blue transition">Tutorial FTP</a>
+                <a href="conclusiones.html" class="hover:text-fedora-blue transition">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 max-w-5xl">
+        <div class="mb-10">
+            <span class="inline-block bg-fedora-blue/10 text-fedora-blue px-3 py-1 rounded-full text-xs font-bold mb-3">CRITERIOS 3, 8 Y 9</span>
+            <h2 class="text-3xl font-bold text-fedora-dark mb-4">Fundamentos del Sistema</h2>
+            <p class="text-slate-600 text-lg">Detalles técnicos sobre el particionado, el entorno gráfico y la gestión de servicios en Fedora Linux.</p>
+        </div>
+
+        <div class="space-y-10">
+
+            <!-- CRITERIO 3: PARTICIONADO E INSTALACIÓN -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">3</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Particionado e Instalación</h3>
+                        <p class="text-sm text-slate-500">Particionado básico sugerido y proceso de instalación</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="text-2xl">🔧</span> Instalador Anaconda
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Fedora utiliza el instalador <strong>Anaconda</strong>, una herramienta gráfica desarrollada por Red Hat que guía 
+                            el proceso de instalación. Permite configuración automática o manual del particionado, selección de software, 
+                            configuración de red y creación del usuario inicial.
+                        </p>
+                        
+                        <h4 class="font-bold text-slate-800 mb-3 mt-6">📋 Proceso de Instalación</h4>
+                        <ol class="text-sm text-slate-600 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">1</span>
+                                <span>Descargar la ISO de Fedora KDE Plasma desde spins.fedoraproject.org</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">2</span>
+                                <span>Crear USB booteable con Fedora Media Writer o Rufus</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">3</span>
+                                <span>Arrancar desde USB y seleccionar idioma</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">4</span>
+                                <span>Configurar destino de instalación (particionado)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">5</span>
+                                <span>Crear usuario y contraseña de root</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">6</span>
+                                <span>Finalizar instalación y reiniciar</span>
+                            </li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <div class="bg-slate-900 rounded-xl p-5 mb-4">
+                            <h4 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                                <span>💾</span> Esquema de Particionado Recomendado (UEFI)
+                            </h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-16 h-8 bg-yellow-500 rounded flex items-center justify-center text-xs font-bold text-black">EFI</div>
+                                    <div class="text-sm">
+                                        <p class="text-white font-mono">/boot/efi</p>
+                                        <p class="text-slate-400 text-xs">600 MB - FAT32 - Arranque UEFI</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-16 h-8 bg-blue-500 rounded flex items-center justify-center text-xs font-bold text-white">/</div>
+                                    <div class="text-sm">
+                                        <p class="text-white font-mono">/ (Raíz)</p>
+                                        <p class="text-slate-400 text-xs">30-50 GB - Btrfs - Sistema operativo</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-16 h-8 bg-green-500 rounded flex items-center justify-center text-xs font-bold text-white">/home</div>
+                                    <div class="text-sm">
+                                        <p class="text-white font-mono">/home</p>
+                                        <p class="text-slate-400 text-xs">Resto del disco - Btrfs - Datos del usuario</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-16 h-8 bg-purple-500 rounded flex items-center justify-center text-xs font-bold text-white">swap</div>
+                                    <div class="text-sm">
+                                        <p class="text-white font-mono">swap</p>
+                                        <p class="text-slate-400 text-xs">4 GB (Opcional - Fedora usa zram por defecto)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <h4 class="font-bold text-fedora-blue text-sm mb-2">💡 Ventaja de /home separado</h4>
+                            <p class="text-sm text-blue-800 leading-relaxed">
+                                Al tener <code class="bg-blue-100 px-1 rounded">/home</code> en una partición separada, puedes reinstalar 
+                                o actualizar el sistema operativo completo sin perder tus documentos, configuraciones personales, 
+                                proyectos y archivos. Es una práctica recomendada para cualquier instalación seria.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CRITERIO 8: ENTORNO GRÁFICO -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">8</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Entorno Gráfico (GUI)</h3>
+                        <p class="text-sm text-slate-500">Descripción del entorno de escritorio que maneja la distro</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="md:col-span-2">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-2xl">🖥️</span>
+                            </div>
+                            <div>
+                                <strong class="text-slate-900 text-lg">KDE Plasma Desktop</strong>
+                                <span class="text-xs text-slate-500 block">Entorno elegido para este proyecto</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Para este proyecto se eligió <strong>Fedora 42 KDE Plasma Desktop Edition</strong>. KDE Plasma es uno de los 
+                            entornos de escritorio más potentes y personalizables de Linux. Ofrece una experiencia moderna con un diseño 
+                            familiar para usuarios de Windows, pero con la flexibilidad total de Linux.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="border border-slate-200 p-4 rounded-lg bg-slate-50">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xl">🎨</span>
+                                    <strong class="text-slate-900">Altamente Personalizable</strong>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    KDE permite personalizar prácticamente todo: paneles, widgets, temas, iconos, atajos de teclado, 
+                                    efectos de escritorio y mucho más. Puedes hacer que se vea como quieras.
+                                </p>
+                            </div>
+                            <div class="border border-slate-200 p-4 rounded-lg bg-slate-50">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xl">🖥️</span>
+                                    <strong class="text-slate-900">Wayland/X11</strong>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    KDE Plasma soporta tanto Wayland (más moderno y seguro) como X11 (mayor compatibilidad). 
+                                    Fedora 42 usa Wayland por defecto con excelente soporte.
+                                </p>
+                            </div>
+                            <div class="border border-slate-200 p-4 rounded-lg bg-slate-50">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xl">📁</span>
+                                    <strong class="text-slate-900">Dolphin File Manager</strong>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Gestor de archivos potente con pestañas, paneles divididos, terminal integrada, 
+                                    vista previa de archivos y soporte para protocolos remotos (SFTP, SMB).
+                                </p>
+                            </div>
+                            <div class="border border-slate-200 p-4 rounded-lg bg-slate-50">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-xl">🔧</span>
+                                    <strong class="text-slate-900">Konsole Terminal</strong>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Terminal potente con pestañas, perfiles personalizables, splits de pantalla y 
+                                    soporte para múltiples sesiones. Ideal para administración de sistemas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl p-5 text-white">
+                        <h4 class="font-bold mb-3 text-sm">¿Por qué KDE Plasma?</h4>
+                        <p class="text-xs text-blue-100 mb-4">
+                            Ventajas de elegir KDE Plasma para este proyecto:
+                        </p>
+                        <ul class="text-xs space-y-2">
+                            <li class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-white rounded-full"></span>
+                                <span><strong>Familiar:</strong> Similar a Windows, fácil transición</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-white rounded-full"></span>
+                                <span><strong>Potente:</strong> Herramientas integradas completas</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-white rounded-full"></span>
+                                <span><strong>Eficiente:</strong> Buen rendimiento en recursos</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="w-2 h-2 bg-white rounded-full"></span>
+                                <span><strong>Discover:</strong> Centro de software gráfico</span>
+                            </li>
+                        </ul>
+                        <div class="mt-4 pt-4 border-t border-white/20">
+                            <p class="text-xs text-blue-100">
+                                Otros Spins disponibles: GNOME, Xfce, Cinnamon, i3, MATE, LXQt
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CRITERIO 9: GESTOR DE SERVICIOS -->
+            <section class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="bg-fedora-blue text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg">9</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900">Gestor de Sistemas y Servicios</h3>
+                        <p class="text-sm text-slate-500">Descripción del gestor de sistemas y servicios de la distro</p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-lg flex items-center justify-center text-2xl">⚙️</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Systemd</h4>
+                                <span class="text-xs text-slate-500">Sistema de init y gestor de servicios</span>
+                            </div>
+                        </div>
+                        
+                        <p class="text-sm text-slate-600 mb-4 leading-relaxed">
+                            Fedora utiliza <strong>Systemd</strong>, el estándar actual en distribuciones Linux modernas. Es el primer proceso 
+                            que se ejecuta (PID 1) y es responsable de iniciar todos los demás procesos del sistema de forma paralela, 
+                            lo que reduce drásticamente los tiempos de arranque.
+                        </p>
+                        
+                        <h5 class="font-bold text-slate-800 mb-2 text-sm">Componentes principales:</h5>
+                        <ul class="text-sm text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span><strong>systemctl:</strong> Comando principal para controlar servicios</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span><strong>journald:</strong> Sistema de logs centralizado (journalctl)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span><strong>Units:</strong> Archivos de configuración para servicios, mounts, timers, etc.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span><strong>Targets:</strong> Grupos de units (equivalentes a los runlevels)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header">
+                                <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                                <span class="text-xs text-slate-400 ml-3">Comandos systemctl</span>
+                            </div>
+                            <div class="p-4 font-mono text-sm text-slate-300 bg-slate-900 space-y-3">
+                                <div>
+                                    <span class="text-gray-500"># Ver estado de un servicio</span><br>
+                                    <span class="text-green-400">systemctl status httpd</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500"># Iniciar un servicio</span><br>
+                                    <span class="text-green-400">systemctl start httpd</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500"># Detener un servicio</span><br>
+                                    <span class="text-green-400">systemctl stop httpd</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500"># Reiniciar un servicio</span><br>
+                                    <span class="text-green-400">systemctl restart httpd</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500"># Habilitar inicio automático</span><br>
+                                    <span class="text-green-400">systemctl enable httpd</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500"># Ver logs del sistema</span><br>
+                                    <span class="text-green-400">journalctl -xe</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
+                            <p class="text-sm text-amber-800">
+                                <strong>💡 Tip:</strong> Usa <code class="bg-amber-100 px-1 rounded">systemctl list-units --type=service</code> 
+                                para ver todos los servicios activos en el sistema.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXTRA: LICENCIAS -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm" x-data="{ open: false }">
+                <button @click="open = !open" class="flex justify-between items-center w-full">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📜</span>
+                        <h3 class="text-lg font-bold text-slate-700">Extra: Software Libre y Licencias</h3>
+                    </div>
+                    <span x-text="open ? '−' : '+'" class="text-xl font-bold text-fedora-blue"></span>
+                </button>
+                <div x-show="open" class="mt-6 pt-6 border-t border-slate-100">
+                    <p class="text-sm text-slate-600 mb-4">
+                        Linux y Fedora se basan en los principios del <strong>Software Libre</strong>. Comprender las licencias es importante 
+                        para cualquier ingeniero de software:
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-bold text-slate-800 mb-2">GPL (General Public License)</h4>
+                            <p class="text-xs text-slate-600">
+                                Licencia "copyleft" que garantiza que las mejoras al código sigan siendo libres. 
+                                Si modificas software GPL, debes publicar tus cambios bajo la misma licencia. 
+                                El kernel Linux usa GPLv2.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-bold text-slate-800 mb-2">MIT / Apache / BSD</h4>
+                            <p class="text-xs text-slate-600">
+                                Licencias más permisivas que permiten uso en software propietario. 
+                                No obligan a publicar el código fuente de las modificaciones. 
+                                Son populares en proyectos empresariales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="mt-12 flex justify-between items-center">
+            <a href="index.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-fedora-blue transition">
+                <span>←</span> Inicio
+            </a>
+            <a href="admin.html" class="inline-flex items-center gap-2 bg-fedora-blue text-white px-5 py-2.5 rounded-lg hover:bg-fedora-dark transition shadow-sm">
+                Continuar a Administración <span>→</span>
+            </a>
+        </div>
+    </main>
+    <footer class="bg-slate-900 text-slate-400 py-6 text-sm mt-auto">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <img src="media/Logo ITSON.png" alt="ITSON Universidad" class="h-10 brightness-0 invert opacity-60">
+            <div class="text-center md:text-right">
+                <p>&copy; 2025 - Francisco Ortega Zazueta</p>
+                <p class="text-xs text-slate-600 mt-1">Redes Linux | ITSON Universidad</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial FTP - Proyecto Fedora</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], }, colors: { fedora: { blue: '#3C6EB4', dark: '#294172', } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="media/Logo ITSON.png" alt="ITSON" class="h-8">
+                <div class="bg-fedora-blue text-white p-1.5 rounded font-bold">F42</div>
+                <h1 class="text-xl font-bold text-slate-800">Redes <span class="text-fedora-blue">Linux</span></h1>
+            </div>
+            <nav class="hidden md:flex gap-5 text-sm font-medium">
+                <a href="index.html" class="hover:text-fedora-blue transition">Inicio</a>
+                <a href="fundamentos.html" class="hover:text-fedora-blue transition">Fundamentos</a>
+                <a href="admin.html" class="hover:text-fedora-blue transition">Administración</a>
+                <a href="servicios.html" class="hover:text-fedora-blue transition">Servicios</a>
+                <a href="tutorial-ftp.html" class="text-fedora-blue font-bold">Tutorial FTP</a>
+                <a href="conclusiones.html" class="hover:text-fedora-blue transition">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 max-w-5xl">
+        
+        <!-- ENCABEZADO DEL TUTORIAL -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="bg-fedora-blue text-white px-3 py-1 rounded-full text-xs font-bold">CRITERIO 10</span>
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">GUÍA COMPLETA</span>
+            </div>
+            <h2 class="text-4xl font-bold text-fedora-dark mb-4">Implementación de Servidor FTP con ProFTPD</h2>
+            <p class="text-slate-600 mb-6 text-lg leading-relaxed">
+                Esta guía paso a paso te enseñará a instalar, configurar y asegurar un servidor FTP funcional en Fedora Linux. 
+                Está diseñada para principiantes, explicando cada comando y concepto involucrado.
+            </p>
+            
+            <!-- TARJETA DE INFORMACIÓN -->
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="text-2xl mb-2">🖥️</div>
+                    <h4 class="font-bold text-slate-800 text-sm">Sistema Operativo</h4>
+                    <p class="text-sm text-slate-500">Fedora 42 KDE Plasma</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="text-2xl mb-2">⏱️</div>
+                    <h4 class="font-bold text-slate-800 text-sm">Tiempo Estimado</h4>
+                    <p class="text-sm text-slate-500">20-30 minutos</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
+                    <div class="text-2xl mb-2">📚</div>
+                    <h4 class="font-bold text-slate-800 text-sm">Nivel</h4>
+                    <p class="text-sm text-slate-500">Principiante - Intermedio</p>
+                </div>
+            </div>
+
+            <!-- BOTÓN IR AL VIDEO -->
+            <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+                <div class="flex items-center gap-4 text-white">
+                    <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                        <span class="text-3xl">▶️</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">¿Prefieres ver el video primero?</h4>
+                        <p class="text-red-100 text-sm">Salta directamente a la demostración en video</p>
+                    </div>
+                </div>
+                <a href="#video-tutorial" class="bg-white text-red-600 px-6 py-3 rounded-lg font-bold hover:bg-red-50 transition shadow-md flex items-center gap-2 shrink-0">
+                    <span>Ir al Video</span>
+                    <span>↓</span>
+                </a>
+            </div>
+
+            <!-- ADVERTENCIA IMPORTANTE -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-r shadow-sm mb-8">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">⚠️</span>
+                    <div>
+                        <strong class="text-amber-900 block mb-1">Requisito Previo Importante</strong>
+                        <p class="text-sm text-amber-800">
+                            Todos los comandos de este tutorial requieren <strong>privilegios de administrador (root)</strong>. 
+                            Tienes dos opciones:
+                        </p>
+                        <ul class="text-sm text-amber-700 mt-2 space-y-1">
+                            <li>• Ejecutar <code class="bg-amber-100 px-1 rounded">sudo -i</code> al inicio para convertirte en root</li>
+                            <li>• Anteponer <code class="bg-amber-100 px-1 rounded">sudo</code> antes de cada comando</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUÉ ES FTP -->
+            <div class="bg-blue-50 border border-blue-100 p-6 rounded-xl mb-8" x-data="{ open: true }">
+                <button @click="open = !open" class="flex justify-between items-center w-full text-left">
+                    <h3 class="text-lg font-bold text-blue-900 flex items-center gap-2">
+                        <span>📖</span> ¿Qué es FTP y por qué ProFTPD?
+                    </h3>
+                    <span x-text="open ? '−' : '+'" class="text-xl font-bold text-blue-600"></span>
+                </button>
+                <div x-show="open" class="mt-4 text-sm text-blue-800 space-y-3">
+                    <p>
+                        <strong>FTP (File Transfer Protocol)</strong> es uno de los protocolos más antiguos de Internet (1971). 
+                        Su función es transferir archivos entre un servidor y clientes a través de la red. Funciona en el puerto <strong>21</strong> por defecto.
+                    </p>
+                    <p>
+                        <strong>ProFTPD</strong> es un servidor FTP de código abierto, altamente configurable y seguro. 
+                        Es popular en servidores Linux por su flexibilidad, documentación extensa y compatibilidad con módulos adicionales.
+                    </p>
+                    <div class="bg-blue-100 p-3 rounded mt-3">
+                        <strong class="block mb-1">Conceptos clave que aprenderás:</strong>
+                        <ul class="list-disc list-inside text-xs space-y-1">
+                            <li><strong>Demonio (daemon):</strong> Programa que corre en segundo plano esperando conexiones</li>
+                            <li><strong>Systemd:</strong> Gestor de servicios que controla el inicio/parada del servidor</li>
+                            <li><strong>Firewall:</strong> Sistema de seguridad que bloquea o permite conexiones de red</li>
+                            <li><strong>SELinux:</strong> Sistema de seguridad extra de Fedora que controla qué pueden hacer los programas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LÍNEA DE TIEMPO DEL TUTORIAL -->
+        <div class="space-y-16 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:ml-5 before:h-full before:w-0.5 before:bg-slate-200">
+            
+            <!-- ==================== PASO 0: PREPARACIÓN ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-500 text-white shadow shrink-0 z-10 font-bold">0</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 0: Preparación del Sistema</h3>
+                    <p class="text-slate-600 mb-4">
+                        Antes de instalar cualquier software, es fundamental asegurarnos de que nuestro sistema está actualizado 
+                        y que tenemos acceso como administrador.
+                    </p>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">0.1</span>
+                            Abrir la Terminal
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            En Fedora con KDE Plasma, tienes varias formas de abrir la terminal <strong>Konsole</strong>:
+                        </p>
+                        <ul class="text-sm text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span>Presiona <kbd class="bg-slate-100 px-2 py-0.5 rounded text-xs border">Super</kbd> (tecla Windows), escribe "Konsole" y presiona Enter</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span>Click derecho en el escritorio → "Abrir terminal aquí"</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-fedora-blue">▸</span>
+                                <span>O desde Dolphin (gestor de archivos): presiona <kbd class="bg-slate-100 px-2 py-0.5 rounded text-xs border">F4</kbd> para panel de terminal</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">0.2</span>
+                            Obtener privilegios de administrador (root)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Para instalar software y modificar configuraciones del sistema, necesitas ser el usuario <strong>root</strong> 
+                            (superusuario/administrador). Ejecuta este comando:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="text-xs text-slate-400 ml-3">Konsole</span></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Cambiar a usuario root (te pedirá tu contraseña)</span><br>
+                                <span class="text-green-400">$</span> sudo -i<br><br>
+                                <span class="text-gray-500"># Ahora verás que el prompt cambia de $ a #</span><br>
+                                <span class="text-gray-500"># Esto indica que eres root</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Explicación:</strong> <code class="bg-slate-200 px-1 rounded">sudo</code> significa "Super User DO" y permite ejecutar comandos como administrador. 
+                                La opción <code class="bg-slate-200 px-1 rounded">-i</code> inicia una sesión interactiva como root, así no tienes que escribir sudo cada vez.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">0.3</span>
+                            Actualizar el sistema
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Es una buena práctica actualizar todos los paquetes antes de instalar software nuevo. 
+                            Esto asegura compatibilidad y parches de seguridad:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Actualizar la lista de paquetes y actualizar todo el sistema</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> dnf update -y<br><br>
+                                <span class="text-gray-500"># Este proceso puede tardar varios minutos...</span><br>
+                                <span class="text-gray-500"># Verás una lista de paquetes que se actualizarán</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Explicación:</strong> <code class="bg-slate-200 px-1 rounded">dnf</code> es el gestor de paquetes de Fedora (similar a apt en Ubuntu). 
+                                <code class="bg-slate-200 px-1 rounded">update</code> descarga e instala actualizaciones. <code class="bg-slate-200 px-1 rounded">-y</code> responde "sí" automáticamente a las confirmaciones.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 1: INSTALACIÓN ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-fedora-blue text-white shadow shrink-0 z-10 font-bold">1</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 1: Instalación de ProFTPD</h3>
+                    <p class="text-slate-600 mb-4">
+                        Ahora vamos a instalar el servidor FTP. ProFTPD está disponible en los repositorios oficiales de Fedora, 
+                        por lo que la instalación es muy sencilla.
+                    </p>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">1.1</span>
+                            Instalar el paquete proftpd
+                        </h4>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Instalar ProFTPD desde los repositorios de Fedora</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> dnf install proftpd -y<br><br>
+                                <span class="text-gray-500"># Salida esperada:</span><br>
+                                <span class="text-green-400">Installing:</span><br>
+                                &nbsp;proftpd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x86_64&nbsp;&nbsp;&nbsp;&nbsp;1.3.8-1.fc42<br>
+                                <span class="text-green-400">Complete!</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Explicación:</strong> <code class="bg-slate-200 px-1 rounded">dnf install</code> descarga e instala el paquete especificado junto con todas sus dependencias. 
+                                ProFTPD se instalará en <code class="bg-slate-200 px-1 rounded">/usr/sbin/proftpd</code> y su configuración en <code class="bg-slate-200 px-1 rounded">/etc/proftpd.conf</code>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">1.2</span>
+                            Verificar la instalación
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Confirmemos que ProFTPD se instaló correctamente verificando su versión:
+                        </p>
+                    <div class="terminal-window shadow-lg">
+                        <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                        <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Verificar la versión instalada</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> proftpd -v<br><br>
+                                <span class="text-gray-500"># Salida esperada (la versión puede variar):</span><br>
+                                <span class="text-green-400">ProFTPD Version 1.3.8</span>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-green-800 flex items-center gap-2">
+                                <span>✅</span> Si ves un número de versión, ¡la instalación fue exitosa!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 2: CONFIGURACIÓN ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-fedora-blue text-white shadow shrink-0 z-10 font-bold">2</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 2: Configuración de ProFTPD</h3>
+                    <p class="text-slate-600 mb-4">
+                        La configuración por defecto de ProFTPD es básica. Vamos a modificarla para hacerla más segura 
+                        y funcional para nuestro caso de uso.
+                    </p>
+
+                    <!-- Nota sobre el archivo -->
+                    <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-4">
+                        <p class="text-sm text-blue-800">
+                            <strong>📁 Archivo de configuración:</strong> <code>/etc/proftpd.conf</code><br>
+                            Este es el archivo principal donde se definen todas las opciones del servidor FTP.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">2.1</span>
+                            Crear una copia de seguridad del archivo original
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            <strong>Regla de oro:</strong> Siempre haz una copia de seguridad antes de modificar archivos de configuración. 
+                            Si algo sale mal, podrás restaurar el original.
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Crear copia de seguridad con extensión .backup</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> cp /etc/proftpd.conf /etc/proftpd.conf.backup<br><br>
+                                <span class="text-gray-500"># Verificar que se creó la copia</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> ls -l /etc/proftpd.conf*<br>
+                                -rw-r--r--. 1 root root 10478 Jan 15 2024 /etc/proftpd.conf<br>
+                                -rw-r--r--. 1 root root 10478 Nov 28 2025 /etc/proftpd.conf.backup
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Explicación:</strong> <code class="bg-slate-200 px-1 rounded">cp</code> copia archivos. <code class="bg-slate-200 px-1 rounded">ls -l</code> lista archivos con detalles como permisos, dueño y fecha de modificación.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">2.2</span>
+                            Abrir el archivo de configuración con Nano
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Usaremos <strong>nano</strong>, un editor de texto sencillo para terminal. Es ideal para principiantes.
+                    </p>
+                    <div class="terminal-window shadow-lg">
+                        <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                        <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Abrir el archivo con el editor nano</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> nano /etc/proftpd.conf
+                            </div>
+                        </div>
+
+                        <!-- Mini guía de Nano -->
+                        <div class="bg-yellow-50 border border-yellow-200 p-4 rounded mt-4">
+                            <h5 class="font-bold text-yellow-800 text-sm mb-2">🔤 Comandos básicos de Nano:</h5>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-yellow-800">
+                                <div><kbd class="bg-yellow-100 px-1 rounded">Ctrl + O</kbd> → Guardar archivo</div>
+                                <div><kbd class="bg-yellow-100 px-1 rounded">Ctrl + X</kbd> → Salir de nano</div>
+                                <div><kbd class="bg-yellow-100 px-1 rounded">Ctrl + W</kbd> → Buscar texto</div>
+                                <div><kbd class="bg-yellow-100 px-1 rounded">↑↓←→</kbd> → Moverse por el archivo</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">2.3</span>
+                            Modificaciones a realizar en el archivo
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Una vez dentro de nano, debes buscar y modificar las siguientes líneas. Usa <kbd class="bg-slate-100 px-1 rounded text-xs">Ctrl + W</kbd> para buscar cada término:
+                        </p>
+
+                        <!-- Modificación 1 -->
+                        <div class="border border-slate-200 rounded-lg p-4 mb-4 bg-slate-50">
+                            <h5 class="font-bold text-sm text-slate-800 mb-2">📝 Modificación 1: Nombre del Servidor</h5>
+                            <p class="text-xs text-slate-600 mb-2">Busca la línea <code>ServerName</code> y cámbiala:</p>
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <div class="bg-red-50 p-2 rounded border border-red-200">
+                                    <p class="text-xs text-red-700 font-bold mb-1">❌ Original:</p>
+                                    <code class="text-xs">ServerName "ProFTPD Default Server"</code>
+                                </div>
+                                <div class="bg-green-50 p-2 rounded border border-green-200">
+                                    <p class="text-xs text-green-700 font-bold mb-1">✅ Cambiar a:</p>
+                                    <code class="text-xs">ServerName "Servidor FTP Fedora"</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modificación 2 -->
+                        <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                            <h5 class="font-bold text-sm text-slate-800 mb-2">📝 Modificación 2: DefaultRoot (MUY IMPORTANTE)</h5>
+                            <p class="text-xs text-slate-600 mb-2">
+                                Busca la línea <code>DefaultRoot</code>. Probablemente esté comentada (con # al inicio). 
+                                <strong>Quita el símbolo #</strong> para activarla:
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <div class="bg-red-50 p-2 rounded border border-red-200">
+                                    <p class="text-xs text-red-700 font-bold mb-1">❌ Original (comentada):</p>
+                                    <code class="text-xs">#DefaultRoot ~</code>
+                                </div>
+                                <div class="bg-green-50 p-2 rounded border border-green-200">
+                                    <p class="text-xs text-green-700 font-bold mb-1">✅ Cambiar a (sin #):</p>
+                                    <code class="text-xs">DefaultRoot ~</code>
+                                </div>
+                            </div>
+                            <div class="bg-amber-50 border border-amber-200 p-3 rounded mt-3">
+                                <p class="text-xs text-amber-800">
+                                    <strong>🔒 ¿Qué hace DefaultRoot ~?</strong><br>
+                                    Esta directiva "enjaulada" (chroot) a los usuarios en su carpeta personal. Significa que cuando un usuario se conecte por FTP, 
+                                    solo podrá ver y acceder a SU carpeta <code>/home/usuario</code>, no podrá navegar hacia otras partes del sistema. 
+                                    <strong>Es una medida de seguridad crítica.</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">2.4</span>
+                            Guardar y salir de Nano
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Una vez realizados los cambios:
+                        </p>
+                        <ol class="text-sm text-slate-600 space-y-2 mb-4">
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">1</span>
+                                Presiona <kbd class="bg-slate-100 px-2 py-0.5 rounded text-xs border">Ctrl + O</kbd> para guardar
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">2</span>
+                                Presiona <kbd class="bg-slate-100 px-2 py-0.5 rounded text-xs border">Enter</kbd> para confirmar el nombre del archivo
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-fedora-blue text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0">3</span>
+                                Presiona <kbd class="bg-slate-100 px-2 py-0.5 rounded text-xs border">Ctrl + X</kbd> para salir de nano
+                            </li>
+                        </ol>
+                        <div class="bg-green-50 border border-green-200 p-3 rounded">
+                            <p class="text-xs text-green-800 flex items-center gap-2">
+                                <span>✅</span> ¡Configuración guardada! Volverás a la línea de comandos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 3: CREAR USUARIO FTP ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-fedora-blue text-white shadow shrink-0 z-10 font-bold">3</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 3: Creación de Usuario FTP Dedicado</h3>
+                    <p class="text-slate-600 mb-4">
+                        Por seguridad, crearemos un usuario específico para FTP que <strong>no pueda iniciar sesión</strong> en el sistema 
+                        (no tendrá acceso a la terminal), solo podrá transferir archivos.
+                    </p>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">3.1</span>
+                            Crear un grupo para usuarios FTP
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Los grupos en Linux permiten agrupar usuarios con permisos similares. Crearemos un grupo llamado <code>ftpgroup</code>:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Crear el grupo ftpgroup</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> groupadd ftpgroup<br><br>
+                                <span class="text-gray-500"># Verificar que se creó</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> grep ftpgroup /etc/group<br>
+                                ftpgroup:x:1001:
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">3.2</span>
+                            Crear el usuario FTP
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Creamos un usuario llamado <code>ftpusuario</code> con características especiales de seguridad:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Crear usuario con opciones de seguridad</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> useradd -g ftpgroup -s /sbin/nologin -d /home/ftpusuario -m ftpusuario
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-800 font-bold mb-3">💡 Explicación de cada opción:</p>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">-g ftpgroup</code> → Asigna al usuario al grupo ftpgroup</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">-s /sbin/nologin</code> → <strong>IMPORTANTE:</strong> El usuario NO puede iniciar sesión en terminal</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">-d /home/ftpusuario</code> → Define su carpeta personal</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">-m</code> → Crea la carpeta personal automáticamente</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">ftpusuario</code> → Nombre del usuario</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">3.3</span>
+                            Asignar contraseña al usuario
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Todo usuario necesita una contraseña. <strong>Elige una contraseña segura</strong> (mínimo 8 caracteres, mezcla de letras, números y símbolos):
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Asignar contraseña (te pedirá escribirla dos veces)</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> passwd ftpusuario<br><br>
+                                Changing password for user ftpusuario.<br>
+                                New password: <span class="text-yellow-400">********</span><br>
+                                Retype new password: <span class="text-yellow-400">********</span><br>
+                                <span class="text-green-400">passwd: all authentication tokens updated successfully.</span>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-amber-800 leading-relaxed">
+                                <strong>⚠️ Nota:</strong> Cuando escribas la contraseña, no verás ningún caracter en pantalla (ni asteriscos). 
+                                Esto es normal en Linux por seguridad. Escribe tu contraseña y presiona Enter.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">3.4</span>
+                            Configurar permisos de la carpeta
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Aseguramos que el usuario tenga los permisos correctos sobre su carpeta:
+                        </p>
+                    <div class="terminal-window shadow-lg">
+                        <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                        <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Cambiar el dueño de la carpeta al usuario</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> chown -R ftpusuario:ftpgroup /home/ftpusuario<br><br>
+                                <span class="text-gray-500"># Establecer permisos (lectura/escritura/ejecución para dueño y grupo)</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> chmod 775 /home/ftpusuario<br><br>
+                                <span class="text-gray-500"># Verificar los permisos</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> ls -ld /home/ftpusuario<br>
+                                drwxrwxr-x. 2 ftpusuario ftpgroup 4096 Nov 28 2025 /home/ftpusuario
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-800 font-bold mb-3">💡 Explicación de permisos 775:</p>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">7</code> (dueño) → rwx = lectura + escritura + ejecución</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">7</code> (grupo) → rwx = lectura + escritura + ejecución</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">5</code> (otros) → r-x = solo lectura y ejecución</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 4: FIREWALL Y SELINUX ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-fedora-blue text-white shadow shrink-0 z-10 font-bold">4</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 4: Configuración de Seguridad (Firewall y SELinux)</h3>
+                    <p class="text-slate-600 mb-4">
+                        Fedora viene con dos capas de seguridad activas por defecto: <strong>Firewalld</strong> (firewall) y <strong>SELinux</strong>. 
+                        Ambas bloquearán el FTP si no las configuramos correctamente.
+                    </p>
+
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r mb-6">
+                        <div class="flex items-start gap-3">
+                            <span class="text-2xl">🛡️</span>
+                            <div>
+                                <strong class="text-red-900 block mb-1">¿Por qué es necesario este paso?</strong>
+                                <p class="text-sm text-red-800">
+                                    Sin configurar el firewall, las conexiones externas al puerto 21 (FTP) serán rechazadas. 
+                                    Sin configurar SELinux, el servicio FTP no podrá leer/escribir archivos aunque los permisos estén correctos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">4.1</span>
+                            Configurar el Firewall (Firewalld)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Firewalld es el firewall por defecto de Fedora. Vamos a abrir el servicio FTP:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Verificar que el firewall está activo</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> systemctl status firewalld<br>
+                                <span class="text-green-400">● firewalld.service - firewalld - dynamic firewall daemon</span><br>
+                                &nbsp;&nbsp;&nbsp;Active: <span class="text-green-400">active (running)</span><br><br>
+
+                                <span class="text-gray-500"># Agregar el servicio FTP al firewall (permanentemente)</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> firewall-cmd --add-service=ftp --permanent<br>
+                                <span class="text-green-400">success</span><br><br>
+
+                                <span class="text-gray-500"># Recargar el firewall para aplicar los cambios</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> firewall-cmd --reload<br>
+                                <span class="text-green-400">success</span><br><br>
+
+                                <span class="text-gray-500"># Verificar que FTP está permitido</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> firewall-cmd --list-services<br>
+                                cockpit dhcpv6-client <span class="text-yellow-400">ftp</span> ssh
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Explicación:</strong> 
+                                <code class="bg-slate-200 px-1 rounded">--permanent</code> hace que el cambio sobreviva a reinicios. 
+                                <code class="bg-slate-200 px-1 rounded">--reload</code> aplica los cambios sin reiniciar el firewall completamente.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">4.2</span>
+                            Configurar SELinux
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            SELinux (Security-Enhanced Linux) es un sistema de control de acceso obligatorio. 
+                            Debemos permitir que el demonio FTP tenga acceso completo para leer/escribir archivos:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Verificar el estado de SELinux</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> getenforce<br>
+                                Enforcing<br><br>
+
+                                <span class="text-gray-500"># Habilitar acceso completo FTP en SELinux</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> setsebool -P ftpd_full_access 1<br><br>
+
+                                <span class="text-gray-500"># Verificar que se aplicó el cambio</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> getsebool ftpd_full_access<br>
+                                ftpd_full_access --> <span class="text-green-400">on</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-800 font-bold mb-3">💡 Explicación:</p>
+                            <ul class="text-sm text-slate-700 space-y-2">
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">setsebool</code> → Modifica "booleanos" de SELinux (interruptores on/off)</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">-P</code> → Hace el cambio permanente (persistent)</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">ftpd_full_access</code> → Permite al demonio FTP acceso completo al sistema de archivos</li>
+                                <li><code class="bg-slate-200 px-1.5 py-0.5 rounded">1</code> → Activa la opción (0 la desactivaría)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-amber-800 leading-relaxed">
+                                <strong>⚠️ Nota de seguridad:</strong> En un servidor de producción, en lugar de <code class="bg-amber-100 px-1 rounded">ftpd_full_access</code>, 
+                                podrías usar políticas más restrictivas. Para este tutorial educativo, esta configuración es suficiente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 5: INICIAR SERVICIO ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-fedora-blue text-white shadow shrink-0 z-10 font-bold">5</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 5: Iniciar y Habilitar el Servicio</h3>
+                    <p class="text-slate-600 mb-4">
+                        Ahora que todo está configurado, es momento de arrancar el servidor FTP y configurarlo para que inicie automáticamente con el sistema.
+                    </p>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">5.1</span>
+                            Iniciar el servicio ProFTPD
+                        </h4>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Iniciar el servicio ahora</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> systemctl start proftpd<br><br>
+
+                                <span class="text-gray-500"># Habilitar inicio automático con el sistema</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> systemctl enable proftpd<br>
+                                Created symlink /etc/systemd/system/multi-user.target.wants/proftpd.service
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg mt-4 border border-slate-100">
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                <strong>💡 Diferencia importante:</strong><br>
+                                • <code class="bg-slate-200 px-1 rounded">start</code> → Inicia el servicio ahora mismo<br>
+                                • <code class="bg-slate-200 px-1 rounded">enable</code> → Configura para que inicie automáticamente en cada reinicio
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-fedora-blue text-white w-6 h-6 rounded flex items-center justify-center text-xs">5.2</span>
+                            Verificar el estado del servicio
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Comprobemos que el servicio está corriendo correctamente:
+                        </p>
+                    <div class="terminal-window shadow-lg">
+                        <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                        <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-red-400">[root@fedora ~]#</span> systemctl status proftpd<br><br>
+                                <span class="text-green-400">● proftpd.service - ProFTPD FTP Server</span><br>
+                                &nbsp;&nbsp;&nbsp;Loaded: loaded (/usr/lib/systemd/system/proftpd.service; <span class="text-green-400">enabled</span>)<br>
+                                &nbsp;&nbsp;&nbsp;Active: <span class="text-green-400">active (running)</span> since Fri 2025-11-28 10:30:00 CST<br>
+                                &nbsp;&nbsp;&nbsp;Main PID: 12345 (proftpd)<br>
+                                &nbsp;&nbsp;&nbsp;Tasks: 1 (limit: 4915)<br>
+                                &nbsp;&nbsp;&nbsp;Memory: 2.4M<br>
+                                &nbsp;&nbsp;&nbsp;CGroup: /system.slice/proftpd.service<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─12345 proftpd: (accepting connections)
+                            </div>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-green-800 flex items-start gap-2">
+                                <span>✅</span>
+                                <span>Si ves <strong>"active (running)"</strong> y <strong>"accepting connections"</strong>, ¡el servidor FTP está funcionando!</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 6: PRUEBAS ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 text-white shadow shrink-0 z-10 font-bold">6</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Paso 6: Pruebas de Conexión</h3>
+                    <p class="text-slate-600 mb-4">
+                        ¡Llegó el momento de la verdad! Vamos a probar que todo funciona correctamente conectándonos al servidor FTP.
+                    </p>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-green-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">6.1</span>
+                            Instalar cliente FTP para pruebas
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Necesitamos un cliente FTP para conectarnos. Instalaremos el cliente básico de línea de comandos:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-red-400">[root@fedora ~]#</span> dnf install ftp -y
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-green-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">6.2</span>
+                            Conectarse al servidor (prueba local)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Nos conectaremos a <code>localhost</code> (la misma máquina) usando el usuario que creamos:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 font-mono text-sm leading-relaxed">
+                                <span class="text-red-400">[root@fedora ~]#</span> <span class="text-slate-300">ftp localhost</span><br>
+                                <span class="text-slate-400">Connected to localhost (127.0.0.1).</span><br>
+                                <span class="text-slate-400">220 Servidor FTP Fedora</span><br>
+                                <span class="text-slate-400">Name (localhost:root):</span> <span class="text-yellow-400">ftpusuario</span><br>
+                                <span class="text-slate-400">331 Password required for ftpusuario</span><br>
+                                <span class="text-slate-400">Password:</span> <span class="text-yellow-400">********</span><br>
+                                <span class="text-green-400">230 User ftpusuario logged in</span><br>
+                                <span class="text-slate-400">Remote system type is UNIX.</span><br>
+                                <span class="text-slate-400">Using binary mode to transfer files.</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">_</span>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 border border-green-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-green-800 leading-relaxed">
+                                <strong>✅ Código 230:</strong> "User logged in" significa que la autenticación fue exitosa. ¡Ya estás dentro del servidor FTP!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-4">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-green-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">6.3</span>
+                            Comandos básicos de FTP
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Una vez conectado al servidor FTP, puedes usar estos comandos:
+                        </p>
+                        <div class="terminal-window shadow-lg">
+                            <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Listar archivos en el servidor</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">ls</span><br>
+                                <span class="text-slate-400">227 Entering Passive Mode</span><br>
+                                <span class="text-slate-400">150 Opening ASCII mode data connection</span><br>
+                                <span class="text-slate-400">226 Transfer complete</span><br><br>
+
+                                <span class="text-gray-500"># Ver en qué directorio estás</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">pwd</span><br>
+                                <span class="text-slate-400">257 "/" is the current directory</span><br><br>
+
+                                <span class="text-gray-500"># Subir un archivo (ejemplo)</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">put archivo.txt</span><br><br>
+
+                                <span class="text-gray-500"># Descargar un archivo (ejemplo)</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">get archivo.txt</span><br><br>
+
+                                <span class="text-gray-500"># Salir del cliente FTP</span><br>
+                                <span class="text-cyan-400">ftp></span> <span class="text-slate-300">bye</span><br>
+                                <span class="text-slate-400">221 Goodbye.</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-5 rounded-lg mt-4 border border-slate-100">
+                            <h5 class="font-bold text-base text-slate-800 mb-3">📋 Resumen de comandos FTP:</h5>
+                            <div class="grid grid-cols-2 gap-3 text-sm text-slate-700">
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">ls</code> → Listar archivos</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">pwd</code> → Directorio actual</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">cd carpeta</code> → Cambiar directorio</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">mkdir nombre</code> → Crear carpeta</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">put archivo</code> → Subir archivo</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">get archivo</code> → Descargar archivo</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">delete archivo</code> → Borrar archivo</div>
+                                <div><code class="bg-slate-200 px-1.5 py-0.5 rounded">bye</code> o <code class="bg-slate-200 px-1.5 py-0.5 rounded">quit</code> → Salir</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="bg-green-600 text-white w-6 h-6 rounded flex items-center justify-center text-xs">6.4</span>
+                            Obtener la IP para conexiones remotas
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">
+                            Si quieres conectarte desde otra computadora en la red, necesitas conocer la dirección IP de tu servidor:
+                        </p>
+                    <div class="terminal-window shadow-lg">
+                        <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                            <div class="p-4 bg-slate-900 text-slate-300 font-mono text-sm leading-relaxed">
+                                <span class="text-gray-500"># Ver todas las interfaces de red y sus IPs</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> ip addr show<br><br>
+                                <span class="text-gray-500"># O de forma más simple:</span><br>
+                                <span class="text-red-400">[root@fedora ~]#</span> hostname -I<br>
+                                <span class="text-yellow-400">192.168.1.100</span> fe80::1234:5678:abcd:efgh
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg mt-4">
+                            <p class="text-sm text-blue-800 leading-relaxed">
+                                <strong>💡 Tip:</strong> El primer número (formato xxx.xxx.xxx.xxx) es tu IPv4. 
+                                Usa esta dirección para conectarte desde otra computadora: <code class="bg-blue-100 px-1 rounded">ftp 192.168.1.100</code>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== PASO 7: SOLUCIÓN DE PROBLEMAS ==================== -->
+            <div class="relative flex items-start group">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500 text-white shadow shrink-0 z-10 font-bold">!</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-3">Solución de Problemas Comunes</h3>
+                    <p class="text-slate-600 mb-4">
+                        Si algo no funciona, aquí están las soluciones a los problemas más frecuentes:
+                    </p>
+
+                    <div class="space-y-4" x-data="{ openProblem: null }">
+                        
+                        <!-- Problema 1 -->
+                        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                            <button @click="openProblem === 1 ? openProblem = null : openProblem = 1" class="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl">🔴</span>
+                                    <span class="font-semibold text-slate-800">"Connection refused" al conectar</span>
+                                </div>
+                                <span x-text="openProblem === 1 ? '−' : '+'" class="text-fedora-blue font-bold text-xl"></span>
+                            </button>
+                            <div x-show="openProblem === 1" class="px-5 py-4 bg-slate-50 border-t border-slate-100 text-sm">
+                                <p class="text-slate-600 mb-3"><strong>Causa:</strong> El servicio no está corriendo o el firewall bloquea la conexión.</p>
+                                <p class="text-slate-700 font-semibold mb-2">Solución:</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                                    <div class="p-3 bg-slate-900 text-slate-300 font-mono text-xs">
+                                        # Verificar si el servicio está corriendo<br>
+                                        systemctl status proftpd<br><br>
+                                        # Si no está corriendo, iniciarlo<br>
+                                        systemctl start proftpd<br><br>
+                                        # Verificar firewall<br>
+                                        firewall-cmd --list-services | grep ftp
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problema 2 -->
+                        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                            <button @click="openProblem === 2 ? openProblem = null : openProblem = 2" class="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl">🔴</span>
+                                    <span class="font-semibold text-slate-800">"530 Login incorrect" - Contraseña rechazada</span>
+                                </div>
+                                <span x-text="openProblem === 2 ? '−' : '+'" class="text-fedora-blue font-bold text-xl"></span>
+                            </button>
+                            <div x-show="openProblem === 2" class="px-5 py-4 bg-slate-50 border-t border-slate-100 text-sm">
+                                <p class="text-slate-600 mb-3"><strong>Causa:</strong> Usuario o contraseña incorrectos, o el usuario no tiene shell válido para FTP.</p>
+                                <p class="text-slate-700 font-semibold mb-2">Solución:</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                                    <div class="p-3 bg-slate-900 text-slate-300 font-mono text-xs">
+                                        # Verificar que el usuario existe<br>
+                                        grep ftpusuario /etc/passwd<br><br>
+                                        # Resetear la contraseña<br>
+                                        passwd ftpusuario<br><br>
+                                        # Agregar /sbin/nologin a shells válidos<br>
+                                        echo "/sbin/nologin" >> /etc/shells
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problema 3 -->
+                        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                            <button @click="openProblem === 3 ? openProblem = null : openProblem = 3" class="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl">🔴</span>
+                                    <span class="font-semibold text-slate-800">"553 Could not create file" - No puede escribir archivos</span>
+                                </div>
+                                <span x-text="openProblem === 3 ? '−' : '+'" class="text-fedora-blue font-bold text-xl"></span>
+                            </button>
+                            <div x-show="openProblem === 3" class="px-5 py-4 bg-slate-50 border-t border-slate-100 text-sm">
+                                <p class="text-slate-600 mb-3"><strong>Causa:</strong> Permisos incorrectos en la carpeta o SELinux bloqueando escritura.</p>
+                                <p class="text-slate-700 font-semibold mb-2">Solución:</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                                    <div class="p-3 bg-slate-900 text-slate-300 font-mono text-xs">
+                                        # Verificar permisos de la carpeta<br>
+                                        ls -ld /home/ftpusuario<br><br>
+                                        # Corregir permisos<br>
+                                        chmod 775 /home/ftpusuario<br>
+                                        chown ftpusuario:ftpgroup /home/ftpusuario<br><br>
+                                        # Verificar SELinux<br>
+                                        getsebool ftpd_full_access<br>
+                                        # Si dice "off", activarlo:<br>
+                                        setsebool -P ftpd_full_access 1
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problema 4 -->
+                        <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                            <button @click="openProblem === 4 ? openProblem = null : openProblem = 4" class="w-full text-left px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl">🔴</span>
+                                    <span class="font-semibold text-slate-800">El servicio no inicia - Error en configuración</span>
+                                </div>
+                                <span x-text="openProblem === 4 ? '−' : '+'" class="text-fedora-blue font-bold text-xl"></span>
+                            </button>
+                            <div x-show="openProblem === 4" class="px-5 py-4 bg-slate-50 border-t border-slate-100 text-sm">
+                                <p class="text-slate-600 mb-3"><strong>Causa:</strong> Error de sintaxis en el archivo de configuración.</p>
+                                <p class="text-slate-700 font-semibold mb-2">Solución:</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-header"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+                                    <div class="p-3 bg-slate-900 text-slate-300 font-mono text-xs">
+                                        # Ver los errores detallados<br>
+                                        journalctl -xe -u proftpd<br><br>
+                                        # Verificar sintaxis del archivo de config<br>
+                                        proftpd -t<br><br>
+                                        # Si hay errores, restaurar backup<br>
+                                        cp /etc/proftpd.conf.backup /etc/proftpd.conf
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== VIDEO DEMOSTRATIVO ==================== -->
+            <div id="video-tutorial" class="relative flex items-start group scroll-mt-24">
+                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-600 text-white shadow shrink-0 z-10 font-bold">▶</div>
+                <div class="ml-8 w-full">
+                    <h3 class="font-bold text-2xl text-slate-900 mb-4">Video Demostrativo</h3>
+                    <p class="text-slate-600 mb-4">
+                        A continuación se muestra el video tutorial donde se realiza todo el proceso paso a paso:
+                    </p>
+                    <div class="aspect-video rounded-xl overflow-hidden shadow-lg">
+                        <iframe 
+                            width="100%" 
+                            height="100%" 
+                            src="https://www.youtube.com/embed/QmTthK2UsJo" 
+                            title="Tutorial FTP en Fedora Linux - Francisco Ortega" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RESUMEN FINAL -->
+        <div class="mt-16 bg-gradient-to-br from-fedora-blue to-indigo-600 text-white rounded-2xl p-8 shadow-xl">
+            <h3 class="text-2xl font-bold mb-4">📋 Resumen de Comandos Ejecutados</h3>
+            <p class="text-blue-100 mb-6">Aquí tienes todos los comandos del tutorial en orden para referencia rápida:</p>
+            <div class="bg-black/30 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                <pre class="text-green-300">
+# Preparación
+sudo -i
+dnf update -y
+
+# Instalación
+dnf install proftpd -y
+proftpd -v
+
+# Configuración
+cp /etc/proftpd.conf /etc/proftpd.conf.backup
+nano /etc/proftpd.conf
+# (Modificar ServerName y descomentar DefaultRoot ~)
+
+# Usuario FTP
+groupadd ftpgroup
+useradd -g ftpgroup -s /sbin/nologin -d /home/ftpusuario -m ftpusuario
+passwd ftpusuario
+chown -R ftpusuario:ftpgroup /home/ftpusuario
+chmod 775 /home/ftpusuario
+
+# Seguridad
+firewall-cmd --add-service=ftp --permanent
+firewall-cmd --reload
+setsebool -P ftpd_full_access 1
+
+# Iniciar servicio
+systemctl start proftpd
+systemctl enable proftpd
+systemctl status proftpd
+
+# Prueba
+dnf install ftp -y
+ftp localhost</pre>
+            </div>
+        </div>
+
+    </main>
+    <footer class="bg-slate-900 text-slate-400 py-6 text-sm mt-auto">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <img src="media/Logo ITSON.png" alt="ITSON Universidad" class="h-10 brightness-0 invert opacity-60">
+            <div class="text-center md:text-right">
+                <p>&copy; 2025 - Francisco Ortega Zazueta</p>
+                <p class="text-xs text-slate-600 mt-1">Redes Linux | ITSON Universidad</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

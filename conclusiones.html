@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusiones - Proyecto Fedora Linux</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], }, colors: { fedora: { blue: '#3C6EB4', dark: '#294172', } } } } }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+    
+    <header class="glass sticky top-0 z-50">
+        <div class="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="media/Logo ITSON.png" alt="ITSON" class="h-8">
+                <div class="bg-fedora-blue text-white p-1.5 rounded font-bold">F42</div>
+                <h1 class="text-xl font-bold text-slate-800">Redes <span class="text-fedora-blue">Linux</span></h1>
+            </div>
+            <nav class="hidden md:flex gap-5 text-sm font-medium">
+                <a href="index.html" class="hover:text-fedora-blue transition">Inicio</a>
+                <a href="fundamentos.html" class="hover:text-fedora-blue transition">Fundamentos</a>
+                <a href="admin.html" class="hover:text-fedora-blue transition">Administración</a>
+                <a href="servicios.html" class="hover:text-fedora-blue transition">Servicios</a>
+                <a href="tutorial-ftp.html" class="hover:text-fedora-blue transition">Tutorial FTP</a>
+                <a href="conclusiones.html" class="text-fedora-blue font-bold">Conclusiones</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 flex-grow max-w-4xl">
+        
+        <!-- ENCABEZADO -->
+        <div class="text-center mb-12">
+            <span class="inline-block bg-fedora-blue/10 text-fedora-blue px-4 py-1.5 rounded-full text-sm font-bold mb-4">CRITERIO 11</span>
+            <h2 class="text-4xl font-bold text-fedora-dark mb-4">Conclusiones Finales</h2>
+            <p class="text-slate-600 text-lg">Reflexión sobre la elección de la distribución y su contribución a la formación profesional</p>
+        </div>
+
+        <!-- TARJETA PRINCIPAL -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
+            
+            <!-- SECCIÓN 1: POR QUÉ FEDORA -->
+            <div class="p-8 md:p-12 border-b border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-fedora-blue to-indigo-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-2xl">🐧</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-slate-900">¿Por qué elegí Fedora?</h3>
+                        <p class="text-sm text-slate-500">Justificación de la distribución seleccionada</p>
+                    </div>
+                </div>
+                
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    Se eligió <strong class="text-fedora-blue">Fedora Linux 42 con KDE Plasma Desktop</strong> por su equilibrio único entre <strong>innovación tecnológica</strong> 
+                    y <strong>relevancia empresarial</strong>. Al ser la distribución "upstream" de Red Hat Enterprise Linux (RHEL), 
+                    aprender Fedora significa aprender las tecnologías que se convertirán en el estándar corporativo de Linux. 
+                    KDE Plasma ofrece un entorno familiar y altamente personalizable, ideal para productividad y administración de sistemas.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                            <span class="text-green-500">✓</span> Tecnologías Nativas
+                        </h4>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• <strong>SELinux:</strong> Seguridad a nivel kernel activa por defecto</li>
+                            <li>• <strong>Firewalld:</strong> Firewall dinámico con zonas configurables</li>
+                            <li>• <strong>Systemd:</strong> Gestión moderna de servicios y arranque</li>
+                            <li>• <strong>Btrfs:</strong> Sistema de archivos con snapshots y compresión</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                            <span class="text-green-500">✓</span> Ventajas para Aprendizaje
+                        </h4>
+                        <ul class="text-sm text-slate-600 space-y-1">
+                            <li>• Software siempre actualizado (ciclo de 6 meses)</li>
+                            <li>• Documentación extensa y comunidad activa</li>
+                            <li>• Compatibilidad directa con certificaciones Red Hat</li>
+                            <li>• Ideal para desarrolladores y futuros SysAdmins</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: CONTRIBUCIÓN A LA FORMACIÓN -->
+            <div class="p-8 md:p-12 border-b border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-2xl">🎓</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-slate-900">Contribución a mi Formación como Ingeniero</h3>
+                        <p class="text-sm text-slate-500">Competencias desarrolladas durante el proyecto</p>
+                    </div>
+                </div>
+                
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    El desarrollo de este proyecto integrador ha fortalecido competencias esenciales para el perfil de un 
+                    <strong>Ingeniero de Software</strong> con conocimientos en infraestructura y administración de sistemas:
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center shrink-0">
+                            <span class="text-white">🖥️</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-1">Administración de Sistemas</h4>
+                            <p class="text-sm text-slate-600">
+                                Capacidad para gestionar usuarios, grupos, permisos y almacenamiento mediante consola. 
+                                Comprensión del sistema de archivos de Linux, gestión de procesos y configuración de servicios.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-100">
+                        <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center shrink-0">
+                            <span class="text-white">🔒</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-1">Seguridad en Redes</h4>
+                            <p class="text-sm text-slate-600">
+                                Comprensión práctica de firewalls (Firewalld), SELinux y protocolos de transferencia como FTP/SFTP. 
+                                Conocimiento de las mejores prácticas para asegurar servicios de red en entornos Linux.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-4 bg-purple-50 rounded-xl border border-purple-100">
+                        <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center shrink-0">
+                            <span class="text-white">⚙️</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-1">Automatización con Scripts</h4>
+                            <p class="text-sm text-slate-600">
+                                Creación de scripts en Bash para automatizar tareas repetitivas como respaldos. 
+                                Programación de tareas con cron para mantenimiento automatizado del sistema.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 p-4 bg-orange-50 rounded-xl border border-orange-100">
+                        <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center shrink-0">
+                            <span class="text-white">🌐</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 mb-1">Arquitectura de Servicios</h4>
+                            <p class="text-sm text-slate-600">
+                                Entendimiento del modelo Cliente-Servidor, configuración de demonios, gestión con Systemd 
+                                y comprensión de los diferentes servicios de red que componen una infraestructura de TI moderna.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: REFLEXIÓN FINAL -->
+            <div class="p-8 md:p-12 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
+                <h3 class="font-bold text-xl mb-4 flex items-center gap-2">
+                    <span>💭</span> Reflexión Final
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Este proyecto representa más que una simple documentación técnica. Es evidencia de la capacidad de investigar, 
+                    implementar y documentar soluciones tecnológicas de manera profesional. Las habilidades adquiridas durante 
+                    este proceso son directamente aplicables en el mundo laboral, donde Linux domina los servidores web, 
+                    la nube y los contenedores.
+                </p>
+                <p class="text-slate-300 leading-relaxed">
+                    La implementación exitosa del servidor FTP demuestra que los conceptos teóricos de redes y sistemas operativos 
+                    pueden materializarse en soluciones prácticas y funcionales. Este conocimiento sienta las bases para 
+                    enfrentar retos más complejos como la administración de servidores en la nube, orquestación de contenedores 
+                    con Kubernetes, y automatización con herramientas como Ansible.
+                </p>
+                
+                <div class="mt-6 pt-6 border-t border-slate-700">
+                    <div class="flex items-center gap-4">
+                        <img src="media/IMG_20240904_103236.jpg" alt="Francisco Ortega" class="w-16 h-16 rounded-full object-cover border-2 border-fedora-blue">
+                        <div>
+                            <p class="font-bold text-white">Francisco Ortega Zazueta</p>
+                            <p class="text-sm text-slate-400">Ingeniería de Software</p>
+                            <p class="text-xs text-slate-500 mt-1">Proyecto Integrador - Noviembre 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="mt-12 flex justify-between items-center">
+            <a href="tutorial-ftp.html" class="inline-flex items-center gap-2 text-slate-600 hover:text-fedora-blue transition">
+                <span>←</span> Tutorial FTP
+            </a>
+            <a href="index.html" class="inline-flex items-center gap-2 bg-fedora-blue text-white px-5 py-2.5 rounded-lg hover:bg-fedora-dark transition shadow-sm">
+                <span>🏠</span> Volver al Inicio
+            </a>
+        </div>
+    </main>
+    
+    <footer class="bg-slate-900 text-slate-400 py-6 text-sm">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <img src="media/Logo ITSON.png" alt="ITSON Universidad" class="h-10 brightness-0 invert opacity-60">
+            <div class="text-center md:text-right">
+                <p>&copy; 2025 - Francisco Ortega Zazueta</p>
+                <p class="text-xs text-slate-600 mt-1">Proyecto Integrador - Redes Linux | ITSON Universidad</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
