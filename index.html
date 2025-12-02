@@ -45,7 +45,7 @@
                 <p class="text-fedora-blue font-semibold text-lg mb-4">Ingeniería de Software</p>
                 <p class="text-slate-600 leading-relaxed mb-4">
                     Este proyecto integrador documenta la administración de servicios en GNU/Linux, enfocándose en la implementación de un servidor FTP seguro. 
-                    A través de esta guía aprenderás desde los fundamentos de la distribución elegida hasta la configuración completa de un servicio de red y mas.
+                    A través de esta guía aprenderás desde los fundamentos de la distribución elegida hasta la configuración completa de un servicio de red.
                 </p>
                 <div class="flex flex-wrap gap-2 justify-center md:justify-start">
                     <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs">Redes Linux</span>
@@ -54,6 +54,141 @@
                 </div>
             </div>
         </div>
+
+        <!-- ANTECEDENTES: HISTORIA DE LINUX -->
+        <section class="mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <span class="text-white text-xl">🐧</span>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-900">Antecedentes: ¿Qué es Linux?</h3>
+                    <p class="text-sm text-slate-500">Historia, origen y propósito del sistema operativo</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="text-2xl">💡</span> ¿Qué es Linux?
+                        </h4>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <strong>Linux</strong> es un <strong>kernel</strong> (núcleo) de sistema operativo de código abierto, tipo Unix. 
+                            Junto con las herramientas del proyecto GNU, forma lo que conocemos como <strong>GNU/Linux</strong>, un sistema 
+                            operativo completo, libre y gratuito que puede ser modificado y distribuido por cualquier persona.
+                        </p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            A diferencia de Windows o macOS, Linux no pertenece a ninguna empresa. Es desarrollado colaborativamente 
+                            por miles de programadores alrededor del mundo y es la base de Android, servidores web, supercomputadoras 
+                            y dispositivos IoT.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <span class="text-2xl">🎯</span> ¿Para qué sirve?
+                        </h4>
+                        <div class="space-y-2">
+                            <div class="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-sm text-slate-600"><strong>Servidores:</strong> El 96% de los servidores web del mundo usan Linux</span>
+                            </div>
+                            <div class="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-sm text-slate-600"><strong>Desarrollo:</strong> Entorno preferido por programadores y DevOps</span>
+                            </div>
+                            <div class="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-sm text-slate-600"><strong>Cloud:</strong> AWS, Google Cloud y Azure corren sobre Linux</span>
+                            </div>
+                            <div class="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-sm text-slate-600"><strong>Móviles:</strong> Android está basado en el kernel Linux</span>
+                            </div>
+                            <div class="flex items-start gap-2 p-2 bg-slate-50 rounded-lg">
+                                <span class="text-green-500 mt-0.5">✓</span>
+                                <span class="text-sm text-slate-600"><strong>Supercomputadoras:</strong> El 100% de las 500 más potentes usan Linux</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LÍNEA DE TIEMPO -->
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+                <h4 class="font-bold text-lg mb-6 flex items-center gap-2">
+                    <span>📜</span> Historia de Linux
+                </h4>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-yellow-400 font-bold">1969</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-slate-600 pl-4 pb-4">
+                                <h5 class="font-bold text-white">Nace UNIX</h5>
+                                <p class="text-slate-400 text-sm">Ken Thompson y Dennis Ritchie crean UNIX en los laboratorios Bell de AT&T. Sería la inspiración para Linux.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-yellow-400 font-bold">1983</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-slate-600 pl-4 pb-4">
+                                <h5 class="font-bold text-white">Proyecto GNU</h5>
+                                <p class="text-slate-400 text-sm">Richard Stallman inicia el proyecto GNU para crear un sistema operativo libre. Desarrolla herramientas esenciales pero falta el kernel.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-yellow-400 font-bold">1987</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-slate-600 pl-4 pb-4">
+                                <h5 class="font-bold text-white">MINIX</h5>
+                                <p class="text-slate-400 text-sm">Andrew Tanenbaum crea MINIX con fines educativos. Linus Torvalds lo usaría como referencia.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-green-400 font-bold">1991</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-green-500 pl-4 pb-4">
+                                <h5 class="font-bold text-green-400">¡Nace Linux!</h5>
+                                <p class="text-slate-400 text-sm"><strong>Linus Torvalds</strong>, estudiante finlandés de 21 años, publica la primera versión del kernel Linux (0.01) como proyecto personal.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-yellow-400 font-bold">1992</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-slate-600 pl-4 pb-4">
+                                <h5 class="font-bold text-white">Licencia GPL</h5>
+                                <p class="text-slate-400 text-sm">Linux adopta la licencia GPL, combinándose con GNU. Nacen las primeras distribuciones: Slackware, Debian.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-16 text-right">
+                                <span class="text-yellow-400 font-bold">Hoy</span>
+                            </div>
+                            <div class="flex-1 border-l-2 border-slate-600 pl-4">
+                                <h5 class="font-bold text-white">Domina el mundo</h5>
+                                <p class="text-slate-400 text-sm">Miles de distribuciones, millones de usuarios. Linux es el sistema más usado en servidores, nube y dispositivos embebidos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cita de Linus -->
+                <div class="mt-6 pt-6 border-t border-slate-700">
+                    <blockquote class="italic text-slate-300 text-sm">
+                        "Hello everybody out there using minix - I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu)..."
+                    </blockquote>
+                    <p class="text-slate-500 text-xs mt-2">— Linus Torvalds, 25 de agosto de 1991 (anuncio original de Linux)</p>
+                </div>
+            </div>
+        </section>
 
         <!-- CRITERIO 1: DISTRIBUCIÓN -->
         <section class="mb-12">
@@ -212,4 +347,3 @@
     </footer>
 </body>
 </html>
-

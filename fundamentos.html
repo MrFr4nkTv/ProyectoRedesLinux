@@ -137,6 +137,140 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- INSTALACIÓN EN MÁQUINA VIRTUAL -->
+                <div class="mt-8 pt-8 border-t border-slate-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white text-xl">💻</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Instalación en Máquina Virtual</h4>
+                            <p class="text-sm text-slate-500">Proceso utilizado en este proyecto</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-50 border border-purple-100 rounded-xl p-5 mb-6">
+                        <p class="text-sm text-purple-800 leading-relaxed">
+                            <strong>📌 Nota:</strong> Para este proyecto se utilizó una <strong>máquina virtual</strong>, lo cual es ideal para 
+                            aprender y experimentar sin riesgo de afectar el sistema operativo principal. Permite crear snapshots, 
+                            clonar configuraciones y probar diferentes escenarios de forma segura.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Opciones de Software -->
+                        <div>
+                            <h5 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span>🔧</span> Software de Virtualización
+                            </h5>
+                            <div class="space-y-3">
+                                <div class="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
+                                        <span class="text-white font-bold text-xs">VB</span>
+                                    </div>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">VirtualBox</strong>
+                                        <p class="text-xs text-slate-500">Gratuito y open source. Ideal para principiantes. Disponible para Windows, macOS y Linux.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                                    <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center shrink-0">
+                                        <span class="text-white font-bold text-xs">VM</span>
+                                    </div>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">VMware Workstation</strong>
+                                        <p class="text-xs text-slate-500">Versión Player gratuita. Mayor rendimiento y compatibilidad profesional.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-3 bg-white rounded-lg border border-slate-200">
+                                    <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center shrink-0">
+                                        <span class="text-white font-bold text-xs">HV</span>
+                                    </div>
+                                    <div>
+                                        <strong class="text-slate-800 text-sm">Hyper-V</strong>
+                                        <p class="text-xs text-slate-500">Integrado en Windows 10/11 Pro. Nativo y eficiente en Windows.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pasos de Instalación VM -->
+                        <div>
+                            <h5 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span>📋</span> Proceso en Máquina Virtual
+                            </h5>
+                            <ol class="space-y-2">
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">1</span>
+                                    <span class="text-slate-600">Descargar e instalar VirtualBox o VMware</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">2</span>
+                                    <span class="text-slate-600">Descargar la ISO de Fedora 42 KDE Plasma</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
+                                    <span class="text-slate-600">Crear nueva máquina virtual (Tipo: Linux, Versión: Fedora 64-bit)</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">4</span>
+                                    <span class="text-slate-600">Asignar recursos: <strong>4 GB RAM</strong> mínimo, <strong>2 CPUs</strong></span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">5</span>
+                                    <span class="text-slate-600">Crear disco virtual: <strong>40-60 GB</strong> (dinámico)</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">6</span>
+                                    <span class="text-slate-600">Montar la ISO en el lector de CD/DVD virtual</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">7</span>
+                                    <span class="text-slate-600">Iniciar la VM y seguir el instalador Anaconda</span>
+                                </li>
+                                <li class="flex items-start gap-2 text-sm">
+                                    <span class="bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5">8</span>
+                                    <span class="text-slate-600">Instalar Guest Additions/VMware Tools (opcional pero recomendado)</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Configuración recomendada -->
+                    <div class="mt-6 bg-slate-900 rounded-xl p-5">
+                        <h5 class="font-bold text-white text-sm mb-4 flex items-center gap-2">
+                            <span>⚙️</span> Configuración Recomendada para la VM
+                        </h5>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🧠</div>
+                                <p class="text-white font-bold">4 GB</p>
+                                <p class="text-slate-400 text-xs">Memoria RAM</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">⚡</div>
+                                <p class="text-white font-bold">2 CPUs</p>
+                                <p class="text-slate-400 text-xs">Procesadores</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">💾</div>
+                                <p class="text-white font-bold">50 GB</p>
+                                <p class="text-slate-400 text-xs">Disco Virtual</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl mb-2">🖥️</div>
+                                <p class="text-white font-bold">128 MB</p>
+                                <p class="text-slate-400 text-xs">Video RAM</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-700">
+                            <p class="text-xs text-slate-400">
+                                <strong class="text-slate-300">💡 Tip:</strong> Habilita la aceleración 3D y EFI en la configuración de la VM para mejor rendimiento con KDE Plasma.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- CRITERIO 8: ENTORNO GRÁFICO -->
